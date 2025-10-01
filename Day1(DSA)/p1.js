@@ -12,12 +12,14 @@ function exclude_number(nums){
     }
 
     if(arr.length !== nums.length){
-        arr.push('_');
+        for(let i=nums.length;i >= arr.length;i--){
+            arr.push('_');
+        }    
     }
     console.log('nums =', arr)
     return count;
 }
 
-let nums = [1,1,2]
+let nums = [1,1,2];
 
 console.log(exclude_number(nums))
