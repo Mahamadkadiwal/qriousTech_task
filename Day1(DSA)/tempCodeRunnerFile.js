@@ -1,5 +1,8 @@
-st.maps((s, i) => {
-        if(vowels.includes(s)){
-            console.log(s)
-        }
-    })
+for(let i=0; i< fstr.length;i++){
+    //     if(fstr[i] === lstr[i]){
+    //         prefix += fstr[i];
+    //     }
+    //     else{
+    //         prefix += "";
+    //     }
+    // }
