@@ -1,4 +1,4 @@
-let x = 3, y = 1;
+let x = 4, y = 1;
 
 function decimalToBinary(num){
     let binary = num.toString(2);

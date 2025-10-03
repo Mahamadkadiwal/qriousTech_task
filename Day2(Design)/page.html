@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soller</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="left">
+        <div>
+          <h5 class="heading">soller</h5>
+        </div>
+        <div class="links" id="navLinks">
+          <a href="#">Products</a>
+          <a href="#">Solutions</a>
+          <a href="#">Services</a>
+          <a href="#">Configure</a>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="right">
+        <span class="phone-icon">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.00977 18.59C4.00977 18.8552 3.90441 19.1096 3.71687 19.2971C3.52934 19.4846 3.27498 19.59 3.00977 19.59C2.74455 19.59 2.4902 19.4846 2.30266 19.2971C2.11512 19.1096 2.00977 18.8552 2.00977 18.59V12.5C2.00977 6.977 6.48677 2.5 12.0098 2.5C17.5328 2.5 22.0098 6.977 22.0098 12.5V15.586C22.0098 15.8512 21.9044 16.1056 21.7169 16.2931C21.5293 16.4806 21.275 16.586 21.0098 16.586C20.7445 16.586 20.4902 16.4806 20.3027 16.2931C20.1151 16.1056 20.0098 15.8512 20.0098 15.586V12.5C20.0098 10.3783 19.1669 8.34344 17.6666 6.84315C16.1663 5.34285 14.1315 4.5 12.0098 4.5C9.88803 4.5 7.8532 5.34285 6.35291 6.84315C4.85262 8.34344 4.00977 10.3783 4.00977 12.5V18.59ZM4.00977 12.5H6.00977C6.5402 12.5 7.04891 12.7107 7.42398 13.0858C7.79905 13.4609 8.00977 13.9696 8.00977 14.5V19.5C8.00977 20.0304 7.79905 20.5391 7.42398 20.9142C7.04891 21.2893 6.5402 21.5 6.00977 21.5H4.00977C3.47933 21.5 2.97062 21.2893 2.59555 20.9142C2.22048 20.5391 2.00977 20.0304 2.00977 19.5V14.5C2.00977 13.9696 2.22048 13.4609 2.59555 13.0858C2.97062 12.7107 3.47933 12.5 4.00977 12.5ZM4.00977 14.5V19.5H6.00977V14.5H4.00977ZM18.0098 12.5H20.0098C20.5402 12.5 21.0489 12.7107 21.424 13.0858C21.7991 13.4609 22.0098 13.9696 22.0098 14.5V19.5C22.0098 20.0304 21.7991 20.5391 21.424 20.9142C21.0489 21.2893 20.5402 21.5 20.0098 21.5H18.0098C17.4793 21.5 16.9706 21.2893 16.5956 20.9142C16.2205 20.5391 16.0098 20.0304 16.0098 19.5V14.5C16.0098 13.9696 16.2205 13.4609 16.5956 13.0858C16.9706 12.7107 17.4793 12.5 18.0098 12.5ZM18.0098 14.5V19.5H20.0098V14.5H18.0098Z"
+              fill="#0369A1"
+            />
+          </svg>
+        </span>
+        <p class="phone">555 818 282</p>
+        <button class="request-button">
+          <span class="request">Request a Quote</span>
+          <span class="arrow-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.5958 10.6569L11.6458 6.70692C11.4636 6.51832 11.3628 6.26571 11.3651 6.00352C11.3674 5.74132 11.4725 5.49051 11.6579 5.3051C11.8434 5.11969 12.0942 5.01452 12.3564 5.01224C12.6186 5.00997 12.8712 5.11076 13.0598 5.29292L18.7168 10.9499C18.81 11.0426 18.8839 11.1527 18.9344 11.2741C18.9848 11.3954 19.0108 11.5255 19.0108 11.6569C19.0108 11.7883 18.9848 11.9184 18.9344 12.0398C18.8839 12.1611 18.81 12.2713 18.7168 12.3639L13.0598 18.0209C12.9675 18.1164 12.8572 18.1926 12.7352 18.245C12.6132 18.2974 12.4819 18.325 12.3492 18.3262C12.2164 18.3273 12.0847 18.302 11.9618 18.2517C11.8389 18.2015 11.7273 18.1272 11.6334 18.0333C11.5395 17.9394 11.4652 17.8278 11.4149 17.7049C11.3647 17.582 11.3394 17.4503 11.3405 17.3175C11.3417 17.1847 11.3693 17.0535 11.4217 16.9315C11.4741 16.8095 11.5503 16.6992 11.6458 16.6069L15.5958 12.6569H6.00977C5.74455 12.6569 5.4902 12.5516 5.30266 12.364C5.11512 12.1765 5.00977 11.9221 5.00977 11.6569C5.00977 11.3917 5.11512 11.1373 5.30266 10.9498C5.4902 10.7623 5.74455 10.6569 6.00977 10.6569H15.5958Z"
+                fill="#78350F"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="heading-page">
+      <div class="right-heading">
+        <div class="right-content-upper">
+          <h1 class="header-page-heading">Get the Sun to Power Your Home</h1>
+          <p class="header-page-para">
+            Viverra viverra nibh enim et aliquam, enim. Tempor, sit mus viverra
+            orci dui consequat turpis scelerisque.
+          </p>
+          <button class="header-button request-button">
+            <span class="header-request request">Request a Quote</span>
+            <span class="header-arrow arrow-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M15.5958 10.6569L11.6458 6.70692C11.4636 6.51832 11.3628 6.26571 11.3651 6.00352C11.3674 5.74132 11.4725 5.49051 11.6579 5.3051C11.8434 5.11969 12.0942 5.01452 12.3564 5.01224C12.6186 5.00997 12.8712 5.11076 13.0598 5.29292L18.7168 10.9499C18.81 11.0426 18.8839 11.1527 18.9344 11.2741C18.9848 11.3954 19.0108 11.5255 19.0108 11.6569C19.0108 11.7883 18.9848 11.9184 18.9344 12.0398C18.8839 12.1611 18.81 12.2713 18.7168 12.3639L13.0598 18.0209C12.9675 18.1164 12.8572 18.1926 12.7352 18.245C12.6132 18.2974 12.4819 18.325 12.3492 18.3262C12.2164 18.3273 12.0847 18.302 11.9618 18.2517C11.8389 18.2015 11.7273 18.1272 11.6334 18.0333C11.5395 17.9394 11.4652 17.8278 11.4149 17.7049C11.3647 17.582 11.3394 17.4503 11.3405 17.3175C11.3417 17.1847 11.3693 17.0535 11.4217 16.9315C11.4741 16.8095 11.5503 16.6992 11.6458 16.6069L15.5958 12.6569H6.00977C5.74455 12.6569 5.4902 12.5516 5.30266 12.364C5.11512 12.1765 5.00977 11.9221 5.00977 11.6569C5.00977 11.3917 5.11512 11.1373 5.30266 10.9498C5.4902 10.7623 5.74455 10.6569 6.00977 10.6569H15.5958Z"
+                  fill="#78350F"
+                />
+              </svg>
+            </span>
+          </button>
+        </div>
+        <div class="right-content-lower">
+          <p class="right-quote">
+            "Viverra viverra nibh enim et aliquam, enim. Tempor, sit mus viverra
+            orci dui consequat turpis scelerisque faucibus."
+          </p>
+          <div class="user-card">
+            <div class="user-thumb"><img src="Assets/user.jpg" alt="" /></div>
+            <div class="user-details">
+              <p class="user-name">Rwanda Melflor</p>
+              <p class="user-site">zerowaste.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="left-heading">
+        <div class="vector"><img src="Assets/Vector 1 (1).png" alt="" /></div>
+        <div class="mask-image">
+          <img src="Assets/Mask masked.png" alt="" />
+        </div>
+        <div class="ellipses">
+          <div class="ellipse1"></div>
+          <div class="ellipse4"></div>
+          <div class="ellipse6"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- section 1  -->
+    <section class="section1">
+      <div class="eclipses-section1">
+        <img class="ellipse14" src="Assets/Ellipse 14.png" alt="ellipse14" />
+        <img class="ellipse15" src="Assets/Ellipse 15.png" alt="ellipse15" />
+        <img class="ellipse18" src="Assets/Ellipse 18.png" alt="ellipse18" />
+        <img class="ellipse17" src="Assets/Ellipse 17.png" alt="ellipse17" />
+        <img class="ellipse16" src="Assets/Ellipse 16.png" alt="ellipse16" />
+      </div>
+      <div class="section1-content">
+        <div class="top">
+          <p class="caption">No more waste</p>
+          <h2 class="caption-heading">Pick the Sun</h2>
+        </div>
+        <p class="caption-para">
+          Et pulvinar nec interdum integer id urna molestie porta nullam. A,
+          donec ornare sed turpis pulvinar purus maecenas quam a. Erat porttitor
+          pharetra sed in mauris elementum sollicitudin.
+        </p>
+      </div>
+      <div class="section1-desktop">
+        <img class="top" src="Assets/Top Bar.png" alt="top" />
+        <img
+          class="desktop"
+          src="Assets/Desktop-App-Placeholder-1.png"
+          alt="desktop"
+        />
+      </div>
+    </section>
+
+    <section class="section2">
+      <div class="section2-figure">
+        <div class="figure-section2">
+            <img class="ellipse15a" src="Assets/Rectangle 15.png" alt="rectangle15">
+        </div>
+        <div class="mobile-app">
+          <div class="frame1">
+            <img class="frame3" src="Assets/Frame 3.png" alt="frame3" />
+            <img class="frame2" src="Assets/Frame 2 (1).png" alt="frame2" />
+            <img class="frame2" src="Assets/Frame 2 (1).png" alt="frame2" />
+            <!-- <div class="frame4">
+                        <img class="star" src="Assets/Star 1 (Stroke).png" alt="star">
+                        <img class="round" src="Assets/Group 1.png" alt="group1">
+                    </div> -->
+          </div>
+          <div class="description">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+          </div>
+          <div class="icon">
+            <img
+              class="arrow"
+              src="Assets/arrow-back-outline.png"
+              alt="arrow"
+            />
+          </div>
+          <div class="react4"></div>
+          <div class="react5"></div>
+          <div class="bottom-menu">
+            <img
+              class="bottom-menu-img"
+              src="Assets/Bottom-Menu.png"
+              alt="bottom-menu"
+            />
+          </div>
+          <div class="image-bottom">
+            <img src="Assets/Image.png" alt="image-bottom" />
+          </div>
+        </div>
+      </div>
+      <div class="section2-content">
+        <div class="top">
+          <p class="caption-section2">Services</p>
+          <h2 class="caption-section2-heading">Personalized services</h2>
+        </div>
+        <div class="para-section2">
+          <p>
+            Pretium lectus ultrices sit tempor, sit ullamcorper volutpat et et.
+            Auctor turpis semper id sit ornare maecenas lectus sed.
+          </p>
+        </div>
+        <div class="row1">
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/IconCar.png" alt="car" />
+            <h6 class="content-box1-heading">Et mauris</h6>
+            <p class="content-box1-para">
+              Posuere quis sed mauris non curabitur pretium elementum eget.
+              Feugiat sed maecenas eu accumsan tristique.
+            </p>
+          </div>
+          <div class="content-box1">
+            <img
+              class="icon-content"
+              src="Assets/Icontrophy.png"
+              alt="trophy"
+            />
+            <h6 class="content-box1-heading">Eget sit</h6>
+            <p class="content-box1-para">
+              Sit bibendum donec dolor fames neque vulputate non sit aliquam.
+              Consequat turpis natoque leo, massa.
+            </p>
+          </div>
+        </div>
+        <div class="row1">
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/IconMan.png" alt="man" />
+            <h6 class="content-box1-heading">Imperdiet pellentesque</h6>
+            <p class="content-box1-para">
+              Platea arcu dapibus non magna cursus lectus id sollicitudin. Enim
+              viverra parturient tristique nulla.
+            </p>
+          </div>
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/IconMoney.png" alt="trophy" />
+            <h6 class="content-box1-heading">Non libero</h6>
+            <p class="content-box1-para">
+              Congue mauris sem vel, urna viverra. Urna, nibh leo suscipit purus
+              ut sed eros, consectetur viverra.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- section 3  -->
+    <section class="section2">
+      <div class="section2-content">
+        <div class="top">
+          <p class="caption-section2">System features</p>
+          <h2 class="caption-section2-heading">Powerful features</h2>
+        </div>
+        <div class="para-section2">
+          <p>
+            Pretium lectus ultrices sit tempor, sit ullamcorper volutpat et et.
+            Auctor turpis semper id sit ornare maecenas lectus sed.
+          </p>
+        </div>
+        <div class="row1">
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/Iconsit.png" alt="sit" />
+            <h6 class="content-box1-heading">Erat sit</h6>
+            <p class="content-box1-para">
+              Id quis lectus pharetra, ultricies integer montes, amet, gravida
+              consectetur. Nunc convallis fringilla nisl magna sagittis.
+            </p>
+          </div>
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/Iconokay.png" alt="okay" />
+            <h6 class="content-box1-heading">Ullamcorper arcu</h6>
+            <p class="content-box1-para">
+              Ipsum at id hendrerit amet faucibus commodo quam nullam. Lectus
+              auctor habitant duis dictum.
+            </p>
+          </div>
+        </div>
+        <div class="row1">
+          <div class="content-box1">
+            <img class="icon-content" src="Assets/Iconup.png" alt="up" />
+            <h6 class="content-box1-heading">Et pellentesque</h6>
+            <p class="content-box1-para">
+              Platea arcu dapibus non magna cursus lectus id sollicitudin. Enim
+              viverra parturient tristique nulla.
+            </p>
+          </div>
+          <div class="content-box1">
+            <img
+              class="icon-content"
+              src="Assets/Iconladder.png"
+              alt="ladder"
+            />
+            <h6 class="content-box1-heading">Amet egestas</h6>
+            <p class="content-box1-para">
+              Congue mauris sem vel, urna viverra. Urna, nibh leo suscipit purus
+              ut sed eros, consectetur viverra.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="section2-figure">
+        <!-- <img class="ellipse15a" src="Assets/Rectangle 15.png" alt="rectangle15"> -->
+        <div class="mobile-app">
+          <div class="frame1">
+            <img class="frame3" src="Assets/Frame 3.png" alt="frame3" />
+            <img class="frame2" src="Assets/Frame 2 (1).png" alt="frame2" />
+            <img class="frame2" src="Assets/Frame 2 (1).png" alt="frame2" />
+            <!-- <div class="frame4">
+                        <img class="star" src="Assets/Star 1 (Stroke).png" alt="star">
+                        <img class="round" src="Assets/Group 1.png" alt="group1">
+                    </div> -->
+          </div>
+          <div class="description">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+          </div>
+          <div class="icon">
+            <img
+              class="arrow"
+              src="Assets/arrow-back-outline.png"
+              alt="arrow"
+            />
+          </div>
+          <div class="react4"></div>
+          <div class="react5"></div>
+          <div class="bottom-menu">
+            <img
+              class="bottom-menu-img"
+              src="Assets/Bottom-Menu.png"
+              alt="bottom-menu"
+            />
+          </div>
+          <div class="image-bottom">
+            <img src="Assets/Image.png" alt="image-bottom" />
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="company-section">
+        <img class="company-logo" src="Assets/Logo Container.png" alt="logo" />
+      </div>
+      <div class="company-name">
+        <p>@ 2023 Soller, Inc. All rights reserved.</p>
+      </div>
+      <div class="company-link">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Support</a>
+      </div>
+    </footer>
+  </body>
+  <script>
+    function toggleMenu() {
+      const navLinks = document.getElementById("navLinks");
+      navLinks.classList.toggle("active");
+    }
+  </script>
+</html>

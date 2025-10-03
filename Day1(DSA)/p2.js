@@ -1,5 +1,5 @@
 let nums = [1,2,3,4,5,6,7];
-const k = 3;
+const k = 6;
 
 function rotate(nums, k){
     let n = nums.length;

@@ -1,5 +1,5 @@
 let flowerbed = [1,0,0,0,1]
-let n=1;
+let n=2;
 
 function canFlowers(flowerbed, n){
     let count_zero =0;
