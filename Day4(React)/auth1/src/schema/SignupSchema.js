@@ -11,7 +11,7 @@ export const SignupSchema = z
     mobile: z
       .string()
       .min(10, "Mobile number must be at least 10 digits")
-      .max(15, "Mobile number is too long"),
+      .max(12, "Mobile number is too long"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
