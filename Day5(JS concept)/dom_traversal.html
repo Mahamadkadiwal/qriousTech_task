@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+    <h1 id="title">Welcome!</h1>
+    <p class="desc">This is a paragraph.</p>
+    <ul id="list">
+        <li>Apple</li>
+        <li>Banana</li>
+        <li>Cherry</li>
+    </ul>
+    </div>
+
+    <script>
+        let para = document.querySelector(".desc");
+        // console.log(para.parentNode);    
+        // console.log(para.parentElement); 
+        // console.log(para.parentElement.parentElement); 
+
+        let container = document.getElementById("container");
+
+        console.log(container.children);             // [h1, p, ul]
+        console.log(container.childNodes);             // [h1, p, ul]
+        console.log(container.firstElementChild);    // <h1 id="title">
+        console.log(container.lastElementChild);     // <ul id="list">
+    </script>
+</body>
+</html>

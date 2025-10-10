@@ -4,8 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {SigninSchema} from "../schema/SigninSchema";
 import { useNavigate } from 'react-router-dom';
 import "../Signup.css";
+import CryptoJS from 'crypto-js';
 
 const Signin = () => {
+  const secretKey = import.meta.env.VITE_SECRET_KEY;
   const navigate = useNavigate();
   const { 
       register, 
@@ -22,19 +24,32 @@ const Signin = () => {
     });
   
     const onSubmit = (data) => {
-      const allUser = JSON.parse(localStorage.getItem('users'));
+      let encrypted_data = localStorage.getItem('users');
+      let users = [];
+      if(!encrypted_data){
+          alert('No data found');        
+      }
+      if(encrypted_data){
+          const bytes = CryptoJS.AES.decrypt(encrypted_data, secretKey);
+          const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+          if(decrypted){
+            users = JSON.parse(decrypted);
+          } 
+        }  
 
-      const user = allUser.find((u) => u.email === data.email && 
+      const user = users.find((u) => u.email === data.email && 
       u.password === data.password);
 
       if(user){
         console.log('Login Successful');
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        const encryptedUser = CryptoJS.AES.encrypt(JSON.stringify(user), secretKey).toString();
+        localStorage.setItem('currentUser', encryptedUser); 
         reset();
         navigate('/home');
       }
       else{
         console.log('Invalid Credentails');
+        alert('Invalid Credentails');
       }
     };
 

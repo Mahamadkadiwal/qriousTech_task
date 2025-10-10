@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from '../schema/SignupSchema';
 import {  useNavigate } from 'react-router-dom';
 import "../Signup.css";
+import CryptoJS from 'crypto-js';
 
 function Signup() {
   const navigate = useNavigate();
-  
+  const secretKey = import.meta.env.VITE_SECRET_KEY;
+  const [existsEmail, setexistsEmail] = useState('');
   const { 
     register, 
     handleSubmit, 
@@ -27,30 +29,75 @@ function Signup() {
     },
   });
 
-  const onSubmit = (newUser) => {
-    // localStorage.setItem("user", JSON.stringify(data));
-    // console.log(newUser);
+  // const onSubmit = (newUser) => {
 
-    delete newUser.confirmPassword;
-    let users = localStorage.getItem('users');
-    console.log(users);
-   
-    if (users) {
-        users = JSON.parse(users); 
-        users.push(newUser); 
-    } else {
-        users = [newUser];
+  // delete newUser.confirmPassword;
+  // let users = JSON.parse(localStorage.getItem('users'));
+
+  //   if (!users) {
+  //     users = [];
+  //   }
+
+  //   const existingUser = users.find((u) => u.email === newUser.email);
+  //   if (existingUser) {
+  //     setexistsEmail('Email already exists. Please use a different one.');
+  //     return;
+  //   }
+
+  //   users.push(newUser);
+
+  //   console.log(users);
+  //   localStorage.setItem('users', JSON.stringify(users));
+
+  //   const updatedUsers = JSON.parse(localStorage.getItem('users'));
+  //   console.log(updatedUsers);
+
+  //   reset();
+  //   navigate('/signin');
+  // };
+
+  // encrypted data 
+  const onSubmit = (newUser) => {
+
+  delete newUser.confirmPassword;
+  let encrypted_data = localStorage.getItem('users');
+
+  let users = [];
+
+  if(encrypted_data){
+    try {
+      const bytes = CryptoJS.AES.decrypt(encrypted_data, secretKey);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+
+      if (decrypted) {
+        users = JSON.parse(decrypted);
+      }
+    } catch (error) {
+      console.error("Decryption error:", error);
+    } 
+  }
+
+    const existingUser = users.find((u) => u.email === newUser.email);
+    if (existingUser) {
+      setexistsEmail('Email already exists. Please use a different one.');
+      return;
     }
 
+    users.push(newUser);
     console.log(users);
-    localStorage.setItem('users', JSON.stringify(users));
+    console.log(existingUser);
+    const encryptedUsers = CryptoJS.AES.encrypt(
+    JSON.stringify(users),
+    secretKey
+    ).toString();
 
-    const updatedUsers = JSON.parse(localStorage.getItem('users'));
-    console.log(updatedUsers);
+    console.log(encryptedUsers);
+    localStorage.setItem('users', encryptedUsers);
 
     reset();
     navigate('/signin');
   };
+
 
   return (
     <div className='form-state'>
@@ -66,6 +113,7 @@ function Signup() {
           <label htmlFor="email">Email:</label>
           <input type="email" id="email" {...register("email")} />
           {errors.email && <p>{errors.email.message}</p>}
+          {existsEmail && <p>{existsEmail}</p>}
         </div>
 
         <div>
