@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { deleteProduct, editProduct, getProduct } from '../_lib/localStorage';
 import TableCrud from './TableCrud';
 import { productData } from '../_lib/ProductData';
@@ -9,15 +9,10 @@ import toast from 'react-hot-toast';
 export default function ProductTable() {
   const [products, setProduct] = useState<Product[]>([]);
 
-  const fetchProducts = () => {
-    const products = getProduct();
-    setProduct(products);
-  };
+  const memoizedProducts = useMemo(() =>  getProduct(), []);
 
-  useEffect(() => {
-
-    fetchProducts();
-  }, []);
+  useEffect(() => {setProduct(memoizedProducts);
+  }, [memoizedProducts]);
 
   if (!products || products.length === 0) return <div>No products found</div>;
 

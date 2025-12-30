@@ -25,6 +25,36 @@
   --background-btn-inactive: #E3EFFA;
 }
 
+.dark {
+  --background: #0b0b0b;
+  --foreground: #ffffff;
+
+  --text-color: #e5e5e5;
+  --font-color: #d1d1d1;
+  --border-color: #3a3a3a;
+
+  --table-bg: #0f1115;
+  --table-header-font-color: #b8b8b8;
+  --table-data-font-color: #c9c9c9;
+  --table-row-hover-bg: #1b1c1f;
+  --table-new-row-bg: #1a1030;
+
+  --header-bg: #0d0d0d;
+  --sidebar-bg: #0e1013;
+  --sidebar-text: #ffffff;
+
+  --primary-btn: #8b5cff;
+  --secondary-btn: #9d77ff;
+
+  --background-btn-inactive: #1f1f1f;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -42,11 +72,7 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+
 
 @layer utilities{
   .input-field {

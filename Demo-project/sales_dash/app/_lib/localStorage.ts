@@ -103,6 +103,7 @@ export function editProduct(id: string, data: Partial<Product>): Product[]
         const updatedProducts = products.map(product => 
             product.id === id ? {...product, ...data} : product
         );
+
         localStorage.setItem("products", JSON.stringify(updatedProducts));
         
         return updatedProducts;

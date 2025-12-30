@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 import { deleteOrder, editOrder, getOrders } from "../_lib/localStorage";
 import { Order } from "../_types/order";
 import TableCrud from "./TableCrud";
@@ -7,26 +7,26 @@ import TableCrud from "./TableCrud";
 export default function OrderTable() {
   const [orders, setOrders] = useState<Order[]>([]);
 
-    const fetchOrders =  () => {
-      const orders =  getOrders() as Order[];
-      if(!orders) return;
-      setOrders(orders);
-    };
+  const fetchOrders = useCallback(() => {
+    const orders =  getOrders() as Order[];
+    if(!orders) return;
+    setOrders(orders);
+  },[]);
 
   useEffect(() => {
     
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   if(!orders) return null;
 
   
-  function handleSave(id: number, updatedRow: Order){
+  function handleSave(id: string, updatedRow: Order){
     editOrder(id, updatedRow);
     fetchOrders();
   }
 
-  function handleDelete(order_id: number){
+  function handleDelete(order_id: string){
     deleteOrder(order_id);
     fetchOrders();
   }

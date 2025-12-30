@@ -6,11 +6,9 @@ import { MdDeleteOutline, MdDone, MdOutlineCancel } from "react-icons/md";
 import { Column, TableCrudProps } from "../_types/tablecrud";
 import Table from "./Table";
 
-
 export default function TableCrud<T extends {id: string; isNew?: boolean}>({data, columns, showActions = true, onDelete, onSave}: TableCrudProps<T>) {
     const [editingRow, setEditingRow] = useState<T["id"] | null>(null);
     const [editData, setEditData]= useState<Partial<T>>({});
-
 
     const tableColumns: Column<T>[] = [
         ...columns,
