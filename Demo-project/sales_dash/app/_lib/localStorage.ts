@@ -122,7 +122,7 @@ export function dashboardCountData() {
   const customers = getUsers().filter(u => u.role === "user").length;
 
   const totalOrders = getOrders();
-  const totalIncome = totalOrders.reduce(
+  const totalIncome = totalOrders.filter(o => o.status !== "Cancelled").reduce(
     (t, o) => t + Number(o.amount),
     0
   );

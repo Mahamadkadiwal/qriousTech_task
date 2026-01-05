@@ -24,6 +24,8 @@ export default function OrderTable() {
   function handleSave(id: string, updatedRow: Order){
     editOrder(id, updatedRow);
     fetchOrders();
+
+     window.dispatchEvent(new Event("orders-updated"));
   }
 
   function handleDelete(order_id: string){
@@ -38,14 +40,15 @@ export default function OrderTable() {
 //   }
 
   const columns = [
-    { headers: "Customer Name", key: "customer_name" },
-    { headers: "Product Name", key: "product_name" },
-    { headers: "Amount", key: "amount" },
-    { headers: "Order Date", key: "order_date" },
-    { headers: "Status", key: "status" },
+    { headers: "Customer Name", key: "customer_name" as keyof Order },
+    { headers: "Product Name", key: "product_name" as keyof Order },
+    { headers: "Amount", key: "amount" as keyof Order },
+    { headers: "Order Date", key: "order_date" as keyof Order },
+    { headers: "Status", key: "status" as keyof Order },
   ];
 
-  if (!orders.length) return <div>Loading...</div>;
+  if (!orders || orders.length === 0) return <div>No orders found</div>;
+  
   return (
     <>
     {/* <button onClick={handlesave}>Ad</button> */}

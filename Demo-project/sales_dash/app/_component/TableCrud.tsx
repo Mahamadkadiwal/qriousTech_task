@@ -61,10 +61,15 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
         Cancelled: "bg-red-100 text-red-700",
     };
 
-    const renderCell = (item: T, key: string) => {
+    function isDataKey(key: string): key is Extract<keyof T, string> {
+        return key !== "actions";
+    }
+
+     const renderCell = (item: T, key: string, index: number) => {
+    const typedKey = key as keyof T | "actions";
         const rowId = item.id;
         
-        if(key === "actions" && showActions) {
+        if(typedKey === "actions" && showActions) {
             return editingRow === rowId ? (
                 <div className="flex space-x-3">
                     <button onClick={(e) => {e.stopPropagation(); 
@@ -80,13 +85,15 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
             )
         }
 
-        if(editingRow === rowId){
+        // edit mode
+        if(editingRow === rowId && isDataKey(key)){
+            const value = (editData[key] as any) ?? "";
             if(key === "description"){
                 return (
                     <input type="text"
                     className="border px-2 py-1 rounded w-60"
-                    value={editData[key] || ""}
-                    onChange={(e) => handleInputChange(key, e.target.value)}
+                    value={value}
+                    onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)}
                     />
                 )
             }
@@ -96,7 +103,7 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
                     onChange={(e) => {
                         const file = e.target.files?.[0];
                         if(file){
-                            handleInputChange(key as keyof T,  ("/products/" + file.name) as T[keyof T]);
+                            handleInputChange(key as keyof T,  ("/products/" + file.name) as any);
                         }
                     }}
                 />
@@ -104,7 +111,7 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
             }
             if(key === "status"){
                 return (
-                    <select className="border px-2 py-1 rounded w-30" value={editData[key] || ""} onChange={(e) => handleInputChange(key, e.target.value)}>
+                    <select className="border px-2 py-1 rounded w-30" value={value} onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)}>
                         <option value="Pending">Pending</option>
                         <option value="Processing">Processing</option>
                         <option value="Shipped">Shipped</option>
@@ -118,24 +125,25 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
                     <input
                         className="border px-2 py-1 rounded w-30"
                         type="date"
-                        value={editData[key] || ""}
-                        onChange={(e) => handleInputChange(key, e.target.value)} 
+                        value={value}
+                        onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)} 
                     />
                 )
             }
             return (
                 <input
                     className="border px-2 py-1 rounded w-30"
-                    value={editData[key] || ""}
-                    onChange={(e) => handleInputChange(key, e.target.value)} 
+                    value={value}
+                    onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)} 
                 />
             )
         }
 
+        // normal mode
         if(key === "image"){
             return (
-                <Image src={item.image}
-                alt={item.name}
+                <Image src={(item as any).image}
+                alt={(item as any).name}
                 width={50}
                 height={50}
                 className="rounded object-cover"
@@ -146,12 +154,12 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
         if (key === "status") {
             return (
                 <select
-                className={`px-3 py-1 rounded-md text-sm ${statusStyle[item.status] || ""}`}
-                value={item.status}
+                className={`px-3 py-1 rounded-md text-sm ${statusStyle[(item as any).status] || ""}`}
+                value={(item as any).status}
                 onChange={(e) => {
                     const newStatus = e.target.value;
 
-                    handleInputChange("status", newStatus);
+                    handleInputChange("status" as keyof T, newStatus as any);
 
                     onSave(item.id, { ...item, status: newStatus });
 
@@ -171,6 +179,7 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
         return (item as any)[key];
 
     } 
+    
   return (
     <Table data={data} renderCell={renderCell} columns={tableColumns} onRowClick={editingRow ? undefined : markAsSeen}  />
   )

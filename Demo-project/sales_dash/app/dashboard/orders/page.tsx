@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import OrderTable from "../../_component/OrderTable";
 import PageHeader from "../../_component/PageHeader";
 import Modal from "../../_component/Modal";
@@ -22,7 +22,7 @@ export default function page() {
   });
 
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (

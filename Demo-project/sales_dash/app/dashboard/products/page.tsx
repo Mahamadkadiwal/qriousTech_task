@@ -34,12 +34,13 @@ export default function Page() {
         !formData.image || 
         !formData.price
       ) {
-        toast.warning("Please fill all fields");
+        toast.error("Please fill all fields");
         return;
       }
       try {
         addProduct(formData);
         toast.success("Product added successfully");
+        window.dispatchEvent(new Event("products-updated"));
       } catch(error){
         console.log('error', error);
         toast.error("Failed to add product");

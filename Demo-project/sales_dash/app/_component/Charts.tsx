@@ -9,7 +9,9 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { ResponsiveContainer } from "recharts";
 import { getOrders } from "../_lib/localStorage";
+import { Order } from "../_types/order";
 
 type chartPoint = {
   date: string;
@@ -23,17 +25,13 @@ interface chartDataSet{
   weeklyChart: chartPoint[];
 }
 
-type order = {
-  order_date: string;
-  amount: number;
-}
 
 export default function Charts() {
   const [data, setData] = useState<chartDataSet | null>(null);
   const [chartType, setChartType] = useState<"daily" | "monthly" | "weekly">('daily');
 
   useEffect(() => {
-    const orders = getOrders() as order[] | null;
+    const orders = getOrders() as Order[] | null;
     if (orders && orders.length > 0) {
       const dailyData : Record<string, chartPoint> = {};
       const monthlyDate : Record<string, chartPoint> = {};
@@ -107,49 +105,63 @@ export default function Charts() {
   }
 
   return (
-    <div>
-      <div className="flex flex-col rounded mt-4 mx-4 p-2">
-        <div className="flex justify-end">
-            <div className="chart-switch">
-                <button className={`chart-btn ${chartType === 'daily' ? 'active' : ''}`} onClick={() => handleChartData('daily')}>Daily</button>
-                <button className={`chart-btn ${chartType === 'monthly' ? 'active' : ''}`} onClick={() => handleChartData('monthly')}>Monthly</button>
-                <button className={`chart-btn ${chartType === 'weekly' ? 'active' : ''}`} onClick={() => handleChartData('weekly')}>Weekly</button>
-            </div>
-        </div>
-        <div className="flex items-center w-full">
-        {data && <LineChart
-          style={{
-            width: "100%",
-            maxWidth: "100%",
-            height: "100%",
-            maxHeight: "60vh",
-            aspectRatio: 1.618,
-          }}
-          responsive
-          data={data[`${chartType}Chart`]}
-          margin={{
-            top: 5,
-            right: 0,
-            left: 0,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="orders"
-            stroke="#8884d8"
-            activeDot={{ r: 8 }}
-          />
-          <Line type="monotone" dataKey="income" stroke="#82ca9d" />
-          {/* <RechartsDevtools /> */}
-        </LineChart>}
+  <div className="w-full">
+    <div className="flex flex-col rounded mt-4 mx-2 md:mx-4 p-2 md:p-4">
+      
+      {/* Buttons */}
+      <div className="flex justify-end mb-2">
+        <div className="chart-switch flex gap-2">
+          <button
+            className={`chart-btn ${chartType === "daily" ? "active" : ""}`}
+            onClick={() => handleChartData("daily")}
+          >
+            Daily
+          </button>
+
+          <button
+            className={`chart-btn ${chartType === "monthly" ? "active" : ""}`}
+            onClick={() => handleChartData("monthly")}
+          >
+            Monthly
+          </button>
+
+          <button
+            className={`chart-btn ${chartType === "weekly" ? "active" : ""}`}
+            onClick={() => handleChartData("weekly")}
+          >
+            Weekly
+          </button>
         </div>
       </div>
+
+      {/* Responsive Chart */}
+      <div className="w-full h-[250px] sm:h-[320px] md:h-[380px] lg:h-[420px] flex items-center justify-center">
+
+        {!data || data[`${chartType}Chart`].length === 0 ? (
+          <div className="text-center text-gray-500 text-sm md:text-base">
+            📉 No orders found yet
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data[`${chartType}Chart`]}
+              margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="orders" stroke="#8884d8" activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="income" stroke="#82ca9d" />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+
+      </div>
+
     </div>
-  );
+  </div>
+);
+
 }
