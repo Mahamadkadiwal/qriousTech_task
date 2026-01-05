@@ -8,6 +8,7 @@ import { Order } from "../_types/order";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const stored = getProduct() as Product[];
@@ -17,6 +18,7 @@ export default function Page() {
   function handleOrder(product: Product) {
     // alert(`Order placed for: ${product.name}`);
     const user = getCurrentUser();
+    setLoading(true);
 
     const data = {
       id: "",
@@ -30,9 +32,11 @@ export default function Page() {
     try{
       addOrder(data);
       toast.success("Order placed successfully");
+      setLoading(false);
     } catch (error) {
       console.log("error", error);
       toast.error("Failed to place order");
+      setLoading(false);
     }
 
   }
@@ -76,9 +80,9 @@ export default function Page() {
                 ₹ {product.price}
               </p>
 
-              <button onClick={() => handleOrder(product)}
+              <button type="button" onClick={() => handleOrder(product)}
                className="mt-2 primary-btn w-fit transition">
-                Order Now
+                {loading ? 'Ordering...' : 'Order Now'}
               </button>
             </div>
           </div>
