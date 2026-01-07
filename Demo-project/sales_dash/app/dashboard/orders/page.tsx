@@ -1,15 +1,23 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import OrderTable from "../../_component/OrderTable";
 import PageHeader from "../../_component/PageHeader";
 import Modal from "../../_component/Modal";
 import Input from "../../_component/Input";
-import { addOrder } from "../../_lib/localStorage";
+import { addOrder, getProduct } from "../../_lib/localStorage";
 import { Order } from "@/app/_types/order";
+import { Product } from "@/app/_types/Product";
 
 export default function page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const productData = getProduct();
+    console.log(productData)
+    setProducts(productData);
+  }, []);
 
   const [formData, setFormData] = useState<Order>({
     id: "",
@@ -58,14 +66,26 @@ export default function page() {
                 setFormData({ ...formData, customer_name: e.target.value })
             } />
 
-          <Input
+          {/* <Input
             id="product_name"
             value={formData.product_name}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, product_name: e.target.value })
             }
             placeholder="Product Name"
-          />
+          /> */}
+
+          <select className="input-field" 
+          name="product" 
+          value={formData.product_name}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) => 
+            setFormData ({ ...formData, product_name: e.target.value })
+          }>
+            <option value="">Select Product</option>
+            {products.map((product) => (
+              <option key={product.id} value={product.name}>{product.name}</option>
+            ))}
+          </select>
 
           <Input id="amount" value={formData.amount} onChange={(e: ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, amount: e.target.value })

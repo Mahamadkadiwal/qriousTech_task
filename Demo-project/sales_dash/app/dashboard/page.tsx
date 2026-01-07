@@ -40,7 +40,7 @@ export default function Page() {
 
       {/* Orders Table */}
       <div className="mt-4 bg-white shadow-sm rounded-xl p-2 md:p-4 overflow-x-auto">
-        <p>Orders</p>
+        <PageHeader title="Orders" />
         <OrderTable />
       </div>
 

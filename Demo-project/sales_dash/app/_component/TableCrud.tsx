@@ -5,6 +5,7 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline, MdDone, MdOutlineCancel } from "react-icons/md";
 import { Column, TableCrudProps } from "../_types/tablecrud";
 import Table from "./Table";
+import toast from "react-hot-toast";
 
 export default function TableCrud<T extends {id: string; isNew?: boolean}>({data, columns, showActions = true, onDelete, onSave}: TableCrudProps<T>) {
     const [editingRow, setEditingRow] = useState<T["id"] | null>(null);
@@ -111,12 +112,12 @@ export default function TableCrud<T extends {id: string; isNew?: boolean}>({data
             }
             if(key === "status"){
                 return (
-                    <select className="border px-2 py-1 rounded w-30" value={value} onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)}>
-                        <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
+                    <select className={`px-3 py-1 rounded-md text-sm ${statusStyle[(item as any).status] || ""}`} value={value} onChange={(e) => handleInputChange(key as keyof T, e.target.value as any)}>
+                        <option className={`${statusStyle["Pending"] || ""}`} value="Pending">Pending</option>
+                        <option className={`${statusStyle["Processing"] || ""}`} value="Processing">Processing</option>
+                        <option className={`${statusStyle["Shipped"] || ""}`} value="Shipped">Shipped</option>
+                        <option className={`${statusStyle["Delivered"] || ""}`} value="Delivered">Delivered</option>
+                        <option className={`${statusStyle["Cancelled"] || ""}`} value="Cancelled">Cancelled</option>
                     </select>
                 )
             }

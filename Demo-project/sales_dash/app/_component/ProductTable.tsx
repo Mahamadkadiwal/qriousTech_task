@@ -44,17 +44,18 @@ export default function ProductTable() {
   }
 
   function handleDelete(id: string) {
-    deleteProduct(id);
-    // fetchProducts();
-    setProduct(prev => prev.filter(p => p.id !== id));
+    try {
+      deleteProduct(id);
+      // fetchProducts();
+      setProduct(prev => prev.filter(p => p.id !== id));
+      toast.success('Product deleted successfully');
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to delete product');
+    }
   }
 
-  // const orders1 = productData();
-
-  // function addProduct(){
-  //     localStorage.setItem("products", JSON.stringify(orders1));
-  //     window.dispatchEvent(new Event("products-updated"));
-  // }
+  
 
   const columns: Column<Product>[] = [
     { headers: "Name", key: "name" as keyof Product },
@@ -64,7 +65,7 @@ export default function ProductTable() {
   ];
   return (
     <>
-      {/* {products.length === 0 && <button onClick={addProduct} className='m-3 primary-btn'>Add Product to Localhost</button>} */}
+      
       <TableCrud<Product> data={products} columns={columns} onSave={handleSave} onDelete={handleDelete} />
     </>
 

@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { Order } from "../_types/order";
 import { Product } from "../_types/Product";
 import { Users } from "../_types/user";
@@ -22,21 +23,37 @@ export function saveUser(data: Users): void{
     if(users.find(user => user.email === data.email)){
         throw new Error("User with this email already exists");
     }
-    users.push(data);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(data.password, salt);
+
+    const newData = {
+        ...data, 
+        password: hash
+    }
+
+    users.push(newData);
     localStorage.setItem("users", JSON.stringify(users));
 
 }
 
-export function authenticateUser(data: Users){
+export function authenticateUser(data: Pick<Users, "email" | "password" | "role">){
     const users = getUsers();
 
-    const user = users.find(user => user.email === data.email && user.password === data.password);
+    const user = users.find(user => user.email === data.email);
     if(!user){
         throw new Error("Invalid email or password");
     }
+
+    const isMatch = bcrypt.compareSync(data.password, user.password);
+    if(!isMatch){
+        throw new Error("Invalid email or password");
+    }
+
     if(user.role !== data.role){
         throw new Error("User role mismatch");
     }
+    
     if(user.role === "admin"){
         localStorage.setItem("currentAdmin", JSON.stringify(user));
     }

@@ -1,47 +1,43 @@
 "use client";
 import { Users } from "@/app/_types/user";
+import { RegisterFormInputs, registerSchema } from "@/app/Schema/SignUp";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
 import Input from "../../_component/Input";
 import { saveUser } from "../../_lib/localStorage";
 
 export default function SignUp() {
   const router = useRouter();
-  const [formData, setFormData] = useState<Users>({
-    username: "",
-    email: "",
-    password: "",
-    role: "user",
-  });
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-    
-    
-    if(!formData.username || !formData.email || !formData.password){
-        alert("Please fill in all fields");
-        return;
-    }
+  const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm<RegisterFormInputs>({
+      resolver: zodResolver(registerSchema),
+      defaultValues: {
+        username: '',
+        email: '',
+        password: '',
+        role: 'user',
+      },
+    });
 
+  const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
     try {
-      saveUser(formData);
+      saveUser(data);
       toast.success('User registered successfully!');
-      if(formData.role === "admin"){
-        localStorage.setItem("currentAdmin", JSON.stringify(formData));
+      if(data.role === "admin"){
+        localStorage.setItem("currentAdmin", JSON.stringify(data));
         router.push("/dashboard");
       } else{
-        localStorage.setItem("currentUser", JSON.stringify(formData));
+        localStorage.setItem("currentUser", JSON.stringify(data));
         router.push("/userHome");
       }
-      // alert("User registered successfully!");
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-        role: "user",
-      });
     } catch (error: unknown) {
       if(error instanceof Error){
         toast.error(error.message);
@@ -51,57 +47,56 @@ export default function SignUp() {
         return;
       }
     }
-  }
+  }  
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-6">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6">
+       {/* <h1 className="text-3xl m-2 font-bold text-(--font-color)">Sales Dashboard</h1> */}
       <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6 md:p-8 space-y-6">
-        <h1 className="text-2xl font-bold text-(--font-color) text-center">
-          Sign Up
+        <h1 className="text-2xl font-bold text-(--font-color) ">
+          Create Your Account
         </h1>
+        <p className="text-(--font-color)">Get started with your free account today.</p>
 
-        <form onSubmit={handleFormSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
             type="text"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
+            {...register("username")}
+            error={errors.username?.message}
             label="Username"
             id="username"
-            placeholder="Username"
+            placeholder="Enter your username"
             className="w-full border p-2 rounded"
+            disabled={isSubmitting}
           />
 
           <Input
             type="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            {...register("email")}
+            error={errors.email?.message}
             label="Email"
             id="email"
-            placeholder="Email"
+            placeholder="you@example.com"
             className="w-full border p-2 rounded"
+            disabled={isSubmitting}
           />
 
           <Input
             type="password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            {...register("password")}
+            error={errors.password?.message}
             label="Password"
             id="password"
-            placeholder="Password"
+            placeholder="Create a strong password"
             className="w-full border p-2 rounded"
+            disabled={isSubmitting}
           />
 
           <label htmlFor="role">Role</label>
           <select
             id="role"
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value as "user" | "admin" })}
+            {...register("role")}
+            disabled={isSubmitting}
             className="input-field"
           >
             <option value="user">User</option>
@@ -111,13 +106,23 @@ export default function SignUp() {
           <button
             type="submit"
             className="w-full bg-(--primary-btn) hover:bg-(--secondary-btn) text-white p-2 rounded font-semibold transition"
+            disabled={isSubmitting}
           >
-            Sign Up
+            {isSubmitting ? "Creating Account..." : "Create Account"}
           </button>
         </form>
-        <div className="text-center text-(--font-color)">
-          <Link href="/auth/signIn">Already have an account?</Link>
-        </div>
+         <div className="text-center pt-6 border-t border-(--border-color)">
+                <p className="text-gray-600">
+                  Already have an account?{" "}
+                  <Link 
+                    href="/auth/signIn" 
+                    className="text-(--primary-btn) font-semibold hover:text-(--secondary-btn) transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                </p>
+              </div>
+
       </div>
     </div>
   );

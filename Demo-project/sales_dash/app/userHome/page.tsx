@@ -1,10 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { addOrder, getCurrentUser, getProduct } from "../_lib/localStorage";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { addOrder, getCurrentUser, getProduct } from "../_lib/localStorage";
 import { Product } from "../_types/Product";
-import { Order } from "../_types/order";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);

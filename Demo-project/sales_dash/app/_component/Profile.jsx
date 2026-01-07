@@ -5,6 +5,7 @@ import { CiUser } from "react-icons/ci";
 import { getCurrentAdmin, getCurrentUser } from "../_lib/localStorage";
 import {useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 const Profile = ({user = ""}) => {
   const router = useRouter();
@@ -56,7 +57,7 @@ const Profile = ({user = ""}) => {
       </button>
 
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-3 mr-2 w-52 bg-white rounded-md shadow-lg border border-(--border-color) z-50 animate-fade-in">
+        <div className="absolute right-0 mt-3 mr-2 w-52 bg-white rounded-md shadow-lg border border-(--border-color) z-50 animate-fade-in ">
           <div className="px-4 py-3 text-center border-b border-(--border-color)">
             <p className="text-sm font-semibold text-(--font-color)">
               {currentUser ? currentUser.username : "guest"}
@@ -68,17 +69,17 @@ const Profile = ({user = ""}) => {
 
           <ul className="py-2">
             <li>
-              <a
+              <Link
                 href="/adminprofile"
-                className="flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--bg-btn-hover)"
+                className="flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsDropdownOpen(false);
                 }}
-              >Profile</a>
+              >Profile</Link>
             </li>
             <li>
-              <button onClick={handleLogout} className="w-full flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--bg-btn-hover) ">
+              <button onClick={handleLogout} className="w-full flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white">
                 Logout
               </button>
             </li>
