@@ -13,6 +13,10 @@ export function getCurrentUser(): Users | null {
     return userData ? JSON.parse(userData): null;
 }
 
+export function handleLogoutAdmin() {
+      localStorage.removeItem("currentAdmin");
+  }
+
 export function getCurrentAdmin(): Users | null{
     const admin = localStorage.getItem("currentAdmin");
     return admin ? JSON.parse(admin): null;
@@ -31,7 +35,11 @@ export function saveUser(data: Users): void{
         ...data, 
         password: hash
     }
-
+    if(data.role === "admin"){
+        localStorage.setItem("currentAdmin", JSON.stringify(newData));
+    } else if(data.role === "user"){
+        localStorage.setItem("currentUser", JSON.stringify(newData));
+    }
     users.push(newData);
     localStorage.setItem("users", JSON.stringify(users));
 
@@ -61,6 +69,18 @@ export function authenticateUser(data: Pick<Users, "email" | "password" | "role"
         localStorage.setItem("currentUser", JSON.stringify(user));
     }
     return user;
+}
+
+
+export function updateAllUsers(userData: Users, updatedUser: Users){
+    const users = getUsers() || [];
+
+      const userIndex = users.findIndex((u: Users) => u.email === userData.email);
+      console.log(userIndex)
+      if (userIndex !== -1) {
+        users[userIndex] = updatedUser;
+        localStorage.setItem("users", JSON.stringify(users));
+      }
 }
 
 export function getOrders(): Order[]{

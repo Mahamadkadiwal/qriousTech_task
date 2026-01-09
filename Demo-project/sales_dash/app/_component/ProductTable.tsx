@@ -1,53 +1,30 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { deleteProduct, editProduct, getProduct } from '../_lib/localStorage';
-import TableCrud from './TableCrud';
-import { productData } from '../_lib/ProductData';
+import toast from 'react-hot-toast';
+import { deleteProduct, editProduct } from '../_lib/localStorage';
 import { Product } from '../_types/Product';
 import { Column } from '../_types/tablecrud';
-import toast from 'react-hot-toast';
+import TableCrud from './TableCrud';
 
-export default function ProductTable() {
-  const [products, setProduct] = useState<Product[]>([]);
-  console.log(products)
-  //const memoizedProducts = useMemo(() =>  getProduct(), []);
+export default function ProductTable({ products, onRefresh }: { products?: Product[], onRefresh?: () => void }) {
 
-  useEffect(() => {
-  const load = () => setProduct(getProduct());
-
-  load();
-
-  window.addEventListener("products-updated", load);
-
-  return () => window.removeEventListener("products-updated", load);
-}, []);
 
   if (!products) return <div>Loading...</div>;
 
-  if(products.length === 0){
-    const product = productData();
-    localStorage.setItem("products", JSON.stringify(product));
-    window.dispatchEvent(new Event("products-updated"));
-  }
-
   function handleSave(id: string, updatedRow: Product) {
-   try{ 
-    editProduct(id, updatedRow);
-   // fetchProducts();
-    setProduct(prev =>
-      prev.map(p => p.id === id ? { ...p, ...updatedRow } : p)
-    );
-    toast.success('Product updated successfully');
-  } catch(err){
-    console.log('error',err);
-    toast.error('Failed to update product');
-  }
+    try {
+      editProduct(id, updatedRow);
+      onRefresh && onRefresh();
+      toast.success('Product updated successfully');
+    } catch (err) {
+      console.log('error', err);
+      toast.error('Failed to update product');
+    }
   }
 
   function handleDelete(id: string) {
     try {
       deleteProduct(id);
       // fetchProducts();
-      setProduct(prev => prev.filter(p => p.id !== id));
+      onRefresh && onRefresh();
       toast.success('Product deleted successfully');
     } catch (error) {
       console.log(error);
@@ -55,7 +32,7 @@ export default function ProductTable() {
     }
   }
 
-  
+
 
   const columns: Column<Product>[] = [
     { headers: "Name", key: "name" as keyof Product },
@@ -65,7 +42,7 @@ export default function ProductTable() {
   ];
   return (
     <>
-      
+
       <TableCrud<Product> data={products} columns={columns} onSave={handleSave} onDelete={handleDelete} />
     </>
 

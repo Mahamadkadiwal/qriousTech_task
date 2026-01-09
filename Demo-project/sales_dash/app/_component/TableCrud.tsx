@@ -5,7 +5,6 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline, MdDone, MdOutlineCancel } from "react-icons/md";
 import { Column, TableCrudProps } from "../_types/tablecrud";
 import Table from "./Table";
-import toast from "react-hot-toast";
 
 export default function TableCrud<T extends {id: string; isNew?: boolean}>({data, columns, showActions = true, onDelete, onSave}: TableCrudProps<T>) {
     const [editingRow, setEditingRow] = useState<T["id"] | null>(null);

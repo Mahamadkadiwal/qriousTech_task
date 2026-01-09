@@ -1,6 +1,5 @@
 import { useSidebarContext } from "../provider/sidebarProvider";
 import Profile from "./Profile";
-import { CiSearch } from "react-icons/ci";
 
 export default function Header() {
   const {isOpen} = useSidebarContext();
@@ -11,7 +10,7 @@ export default function Header() {
         </div>
 
         <div className="flex items-center space-x-4 m-3">
-            <i className="text-2xl text-(--font-color)"><CiSearch /></i>
+         
             <Profile user="admin" />
         </div>
     </header>

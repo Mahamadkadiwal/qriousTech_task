@@ -19,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({label = "", id=
         type={isPassword && showPassword ? "text": type}
         disabled={disabled}
         {...props}
-        className={`input-field
+        className={`input-field text-(--font-color)
         ${error ? "border-red-500 focus:ring-red-500" : ""}  
         `}
         aria-invalid={!!error}

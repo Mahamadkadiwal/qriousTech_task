@@ -70,10 +70,11 @@ const Profile = ({user = ""}) => {
           <ul className="py-2">
             <li>
               <Link
-                href="/adminprofile"
+                
+                href={`${user === "admin" ? "/dashboard/adminProfile" : "/dashboard/userProfile"}`}
                 className="flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white"
-                onClick={(e) => {
-                  e.preventDefault();
+                onClick={() => {
+                  // e.preventDefault();
                   setIsDropdownOpen(false);
                 }}
               >Profile</Link>

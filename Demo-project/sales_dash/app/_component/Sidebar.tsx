@@ -7,6 +7,9 @@ import { GoInbox } from "react-icons/go";
 import { usePathname } from "next/navigation";
 import { useSidebarContext } from "../provider/sidebarProvider";
 import { ReactNode } from "react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { handleLogoutAdmin } from "../_lib/localStorage";
 
 type MenuItem = {
   name: string;
@@ -15,6 +18,7 @@ type MenuItem = {
 };
 
 export default function Sidebar() {
+  const router = useRouter();
   const { isOpen, toggleSidebar } = useSidebarContext();
   const path = usePathname();
 
@@ -24,9 +28,14 @@ export default function Sidebar() {
     { name: "Products", icon: <GoInbox />, link: "/dashboard/products" },
   ];
 
+  const handleLogout = () => {
+    handleLogoutAdmin();
+    toast.success("Logged out successfully");
+    router.replace("/auth/signIn");
+  }
+
   return (
     <>
-      {/* Overlay (Mobile Only) */}
       {isOpen && (
         <div
           onClick={toggleSidebar}
@@ -44,7 +53,7 @@ export default function Sidebar() {
           ${isOpen ? "w-60" : "w-12 md:w-16"}
         `}
       >
-        {/* Header */}
+
         <div className="flex items-center justify-between p-3">
           {isOpen ? (
             <h2 className="text-2xl text-(--font-color)">SD</h2>
@@ -64,8 +73,7 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Menu */}
-        <nav className="mt-4 px-2 space-y-2">
+        <nav className="flex-1 mt-4 px-2 space-y-2">
           {menu.map((item, index) => (
             <Link
               key={index}
@@ -78,7 +86,20 @@ export default function Sidebar() {
               {isOpen && <span>{item.name}</span>}
             </Link>
           ))}
+
+          
         </nav>
+        <div className="px-2 pb-4">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-2 rounded-md sidebar-link w-full text-left"
+        >
+          <i className="text-xl">
+            <FaArrowLeft />
+          </i>
+          {isOpen && <span>Logout</span>}
+        </button>
+          </div>
       </aside>
     </>
   );

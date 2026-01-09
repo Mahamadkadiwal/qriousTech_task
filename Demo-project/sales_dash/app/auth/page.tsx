@@ -7,18 +7,13 @@ import { HiSparkles } from "react-icons/hi";
 export default function AuthLanding() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-(--primary-btn) opacity-5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-(--secondary-btn) opacity-5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+
 
       <div className="relative">
-        {/* Hero Section */}
         <section className="px-6 py-16 md:py-24 lg:py-12">
           <div className="max-w-7xl mx-auto">
             <div className="text-center space-y-8 animate-fadeInUp">
-              {/* Badge */}
+
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-(--border-color) rounded-full shadow-sm">
                 {/* <HiSparkles className="text-(--primary-btn)" /> */}
                 <span className="text-sm font-semibold text-(--font-color)">
@@ -26,7 +21,7 @@ export default function AuthLanding() {
                 </span>
               </div>
 
-              {/* Main Heading */}
+
               <div className="space-y-4">
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-(--font-color) leading-tight">
                   Manage Orders.
@@ -39,13 +34,11 @@ export default function AuthLanding() {
                 </h1>
               </div>
 
-              {/* Description */}
               <p className="max-w-3xl mx-auto text-lg md:text-xl text-gray-600 leading-relaxed px-4">
-                Real-time order tracking, intelligent analytics, and seamless management. 
+                Real-time order tracking, intelligent analytics, and seamless management.
                 Everything you need to supercharge your sales operations in one powerful platform.
               </p>
 
-              {/* button login register  */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                 <Link
                   href="/auth/signUp"
@@ -63,15 +56,14 @@ export default function AuthLanding() {
                 </Link>
               </div>
 
-              
+
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="px-6 py-16 md:py-24 bg-white">
           <div className="max-w-7xl mx-auto">
-            {/* Section Header */}
+
             <div className="text-center space-y-4 mb-16">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 border border-(--border-color) rounded-full">
                 <span className="text-sm font-semibold text-(--primary-btn)">
@@ -130,12 +122,10 @@ export default function AuthLanding() {
                   key={idx}
                   className="group bg-gray-50 p-8 rounded-2xl border border-(--border-color) hover:border-(--primary-btn) hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  {/* Icon */}
                   <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl bg-linear-to-br ${feature.gradient} text-white text-2xl mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     {feature.icon}
                   </div>
 
-                  {/* Content */}
                   <h3 className="text-xl md:text-2xl font-semibold mb-3 text-(--font-color)">
                     {feature.title}
                   </h3>
@@ -143,7 +133,6 @@ export default function AuthLanding() {
                     {feature.description}
                   </p>
 
-                  {/* Hover Arrow */}
                   <div className="mt-4 text-(--primary-btn) font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2">
                     Learn more <FaArrowRight className="text-sm" />
                   </div>
@@ -152,46 +141,8 @@ export default function AuthLanding() {
             </div>
           </div>
         </section>
-
-        
-
-        
       </div>
 
-      {/* Custom Animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out;
-        }
-
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 0.05;
-          }
-          50% {
-            opacity: 0.1;
-          }
-        }
-
-        .animate-pulse {
-          animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-      `}</style>
     </div>
   );
 }

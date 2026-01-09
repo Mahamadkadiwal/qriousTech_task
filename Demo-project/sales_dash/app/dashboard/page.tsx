@@ -1,30 +1,35 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BarChartShown from "../_component/BarChartShown";
 import Charts from "../_component/Charts";
 import DashboardCard from "../_component/DashboardCard";
 import Donut from "../_component/Donut";
 import OrderTable from "../_component/OrderTable";
 import PageHeader from "../_component/PageHeader";
-import { dashboardCountData } from "../_lib/localStorage";
+import { dashboardCountData, getOrders } from "../_lib/localStorage";
 import { DashboardData } from "../_lib/Types";
+import { Order } from "../_types/order";
 
 export default function Page() {
   const [data, setData] = useState<DashboardData | null>(null);
 
-  useEffect(() => {
-    const loadDashboard = () => {
-    const data = dashboardCountData();
-    if (data) setData(data);
-  };
+  const [orders, setOrders] = useState<Order[]>([]);
+  
+    const fetchOrders = useCallback(() => {
+      const orders =  getOrders() as Order[];
+      if(!orders) return;
+      setOrders(orders);
+    },[]);
+  
+    useEffect(() => {
 
-  loadDashboard(); 
+      fetchOrders();
+    }, [fetchOrders]);
 
-  window.addEventListener("orders-updated", loadDashboard);
+    useEffect(() => {
+      setData(dashboardCountData());
+    }, [orders]);
 
-  return () =>
-    window.removeEventListener("orders-updated", loadDashboard);
-  }, []);
 
   if (!data) return <div className="p-4">Loading...</div>;
 
@@ -33,15 +38,13 @@ export default function Page() {
       
       <PageHeader title="Dashboard" />
 
-      {/* Top Stats Cards */}
       <div className="mb-6">
         <DashboardCard data={data} />
       </div>
 
-      {/* Orders Table */}
       <div className="mt-4 bg-white shadow-sm rounded-xl p-2 md:p-4 overflow-x-auto">
         <PageHeader title="Orders" />
-        <OrderTable />
+        <OrderTable orders={orders} onRefresh={fetchOrders} />
       </div>
 
       {/* Line Chart */}

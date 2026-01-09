@@ -1,10 +1,8 @@
 "use client";
-import { Users } from "@/app/_types/user";
 import { RegisterFormInputs, registerSchema } from "@/app/Schema/SignUp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
 import Input from "../../_component/Input";
@@ -32,10 +30,8 @@ export default function SignUp() {
       saveUser(data);
       toast.success('User registered successfully!');
       if(data.role === "admin"){
-        localStorage.setItem("currentAdmin", JSON.stringify(data));
-        router.push("/dashboard");
+         router.push("/dashboard");
       } else{
-        localStorage.setItem("currentUser", JSON.stringify(data));
         router.push("/userHome");
       }
     } catch (error: unknown) {
@@ -49,69 +45,126 @@ export default function SignUp() {
     }
   }  
 
+ 
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6">
-       {/* <h1 className="text-3xl m-2 font-bold text-(--font-color)">Sales Dashboard</h1> */}
-      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6 md:p-8 space-y-6">
-        <h1 className="text-2xl font-bold text-(--font-color) ">
-          Create Your Account
-        </h1>
-        <p className="text-(--font-color)">Get started with your free account today.</p>
+    <div className="min-h-screen  from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
+      
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input
-            type="text"
-            {...register("username")}
-            error={errors.username?.message}
-            label="Username"
-            id="username"
-            placeholder="Enter your username"
-            className="w-full border p-2 rounded"
-            disabled={isSubmitting}
-          />
+      <div className="relative w-full max-w-5xl">
+        <div className="grid lg:grid-cols-2 gap-4 lg:gap-0">
 
-          <Input
-            type="email"
-            {...register("email")}
-            error={errors.email?.message}
-            label="Email"
-            id="email"
-            placeholder="you@example.com"
-            className="w-full border p-2 rounded"
-            disabled={isSubmitting}
-          />
+          <div className="hidden lg:flex flex-col justify-center p-12 bg-linear-to-br from-(--primary-btn) to-(--secondary-btn) rounded-l-2xl text-white">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+                  <span className="text-sm font-semibold">Sales Dashboard</span>
+                </div>
+                
+                <h2 className="text-4xl font-bold leading-tight">
+                  Welcome to the Future of Sales Management
+                </h2>
+                
+                <p className="text-lg text-white/90">
+                  Join thousands of businesses streamlining their sales operations with our powerful platform.
+                </p>
+              </div>
 
-          <Input
-            type="password"
-            {...register("password")}
-            error={errors.password?.message}
-            label="Password"
-            id="password"
-            placeholder="Create a strong password"
-            className="w-full border p-2 rounded"
-            disabled={isSubmitting}
-          />
+              
 
-          <label htmlFor="role">Role</label>
-          <select
-            id="role"
-            {...register("role")}
-            disabled={isSubmitting}
-            className="input-field"
-          >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
+              
+            </div>
+          </div>
 
-          <button
-            type="submit"
-            className="w-full bg-(--primary-btn) hover:bg-(--secondary-btn) text-white p-2 rounded font-semibold transition"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Creating Account..." : "Create Account"}
-          </button>
-        </form>
-         <div className="text-center pt-6 border-t border-(--border-color)">
+          <div className="bg-white rounded-2xl lg:rounded-l-none lg:rounded-r-2xl shadow-2xl p-8 md:p-12">
+            <div className="space-y-8">
+              
+              <div className="lg:hidden text-center space-y-2">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full border border-(--border-color)">
+                  <span className="text-sm font-semibold text-(--font-color)">Sales Dashboard</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold text-(--font-color)">
+                  Create Your Account
+                </h1>
+                <p className="text-gray-600">
+                  Get started with your free account today
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <Input
+                  type="text"
+                  {...register("username")}
+                  error={errors.username?.message}
+                  label="Username"
+                  id="username"
+                  placeholder="Enter your username"
+                  className="w-full"
+                  disabled={isSubmitting}
+                />
+
+                <Input
+                  type="email"
+                  {...register("email")}
+                  error={errors.email?.message}
+                  label="Email Address"
+                  id="email"
+                  placeholder="you@example.com"
+                  className="w-full"
+                  disabled={isSubmitting}
+                />
+
+                <Input
+                  type="password"
+                  {...register("password")}
+                  error={errors.password?.message}
+                  label="Password"
+                  id="password"
+                  placeholder="Create a strong password"
+                  className="w-full"
+                  disabled={isSubmitting}
+                />
+
+                {/* Role Selection - Improved Design */}
+                <div className="space-y-2">
+                  <label htmlFor="role" className="block text-sm font-semibold text-(--font-color)">
+                    Select Your Role
+                  </label>
+                  <select
+                    id="role"
+                    {...register("role")}
+                    disabled={isSubmitting}
+                    className="w-full input-field"
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                  
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full primary-btn text-white p-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Creating Account...
+                    </span>
+                  ) : (
+                    "Create Account"
+                  )}
+                </button>
+              </form>
+
+              <div className="text-center pt-6 border-t border-(--border-color)">
                 <p className="text-gray-600">
                   Already have an account?{" "}
                   <Link 
@@ -123,6 +176,12 @@ export default function SignUp() {
                 </p>
               </div>
 
+              <p className="text-xs text-center text-gray-500">
+                By creating an account, you agree to our Terms of Service and Privacy Policy
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

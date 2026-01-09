@@ -8,7 +8,7 @@ const productData = [
     description: "Powerful smartphone with Super AMOLED display",
     image: "/products/samsunga55.webp",
     price: 24999,
-    isNew: true,
+    isNew: true
   },
   {
     id: "2",

@@ -1,11 +1,11 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import OrderTable from "../../_component/OrderTable";
 import PageHeader from "../../_component/PageHeader";
 import Modal from "../../_component/Modal";
 import Input from "../../_component/Input";
-import { addOrder, getProduct } from "../../_lib/localStorage";
+import { addOrder, getOrders, getProduct } from "../../_lib/localStorage";
 import { Order } from "@/app/_types/order";
 import { Product } from "@/app/_types/Product";
 
@@ -13,9 +13,21 @@ export default function page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
 
+  const [orders, setOrders] = useState<Order[]>([]);
+  
+    const fetchOrders = useCallback(() => {
+      const orders =  getOrders() as Order[];
+      if(!orders) return;
+      setOrders(orders);
+    },[]);
+  
+    useEffect(() => {
+      
+      fetchOrders();
+    }, [fetchOrders]);
+
   useEffect(() => {
     const productData = getProduct();
-    console.log(productData)
     setProducts(productData);
   }, []);
 
@@ -43,6 +55,7 @@ export default function page() {
       return;
     }
     addOrder(formData);
+    fetchOrders();
     setIsOpen(false);
   }
 
@@ -55,7 +68,7 @@ export default function page() {
       <PageHeader title="Orders" btnText="Add Order" onClick={handleClick} />
 
       <div className="mt-2">
-        <OrderTable />
+        <OrderTable orders={orders} onRefresh={fetchOrders} />
       </div>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Order">

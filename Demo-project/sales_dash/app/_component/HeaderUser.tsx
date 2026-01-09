@@ -13,7 +13,7 @@ export default function HeaderUser() {
             <Link href="/userHome/order">Orders</Link>
         </div>
         <div className="flex items-center space-x-4 m-3">
-            <i className="text-2xl text-(--font-color)"><CiSearch /></i>
+           
             <Profile user="user" />
         </div>
 

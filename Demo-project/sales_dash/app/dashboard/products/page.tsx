@@ -4,10 +4,11 @@ import Input from "@/app/_component/Input";
 import Modal from "@/app/_component/Modal";
 import PageHeader from "@/app/_component/PageHeader";
 import ProductTable from "@/app/_component/ProductTable";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { addProduct } from "../../_lib/localStorage";
+import { addProduct, getProduct } from "../../_lib/localStorage";
 import { Product } from "@/app/_types/Product";
+import { productData } from "@/app/_lib/ProductData";
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -20,6 +21,23 @@ export default function Page() {
       price: "",
       isNew: true,
     });
+
+    const [products, setProduct] = useState<Product[]>([]);
+      
+      //const memoizedProducts = useMemo(() =>  getProduct(), []);
+    
+      const fetchProducts = useCallback(() => {
+        const products = getProduct() as Product[];
+        if(!products || products.length === 0){
+          localStorage.setItem("products", JSON.stringify(productData()));
+        }
+        setProduct(products);
+      },[]);
+
+      useEffect(() => {
+        fetchProducts();
+
+      }, [fetchProducts]);
 
     function handleClick() {
     setIsOpen(!isOpen);
@@ -40,7 +58,7 @@ export default function Page() {
       try {
         addProduct(formData);
         toast.success("Product added successfully");
-        window.dispatchEvent(new Event("products-updated"));
+        fetchProducts();
       } catch(error){
         console.log('error', error);
         toast.error("Failed to add product");
@@ -57,15 +75,15 @@ export default function Page() {
       });
     }
   return (
-    <div className="bg-white min-h-screen p-2">
+    <div className="bg-background min-h-screen p-2">
           <PageHeader title="Products" btnText="Add Products" onClick={handleClick} />
     
           <div className="mt-2">
-            <ProductTable />
+            <ProductTable products={products} onRefresh={fetchProducts} />
           </div>
     
           <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Product">
-            <form className="space-y-3" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <Input
               type="text"
               placeholder="Product Name" 
