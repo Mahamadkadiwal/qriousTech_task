@@ -4,9 +4,11 @@ export interface TableColumn<T>{
     path?: string;
 }
 
-export interface TableProps<T extends { isNew?: boolean }>{
-    data: T[];
+export interface TableProps<T>{
+    data: T[];  
     columns: TableColumn<T>[];
-    renderCell?: (item: T, key: string, index: number) => React.ReactNode;
+    renderCell?: (item: T, key: keyof T | "actions", index: number) => React.ReactNode;
     onRowClick?: (item: T) => void;
 }
+
+export type PropertyKey = string | number | symbol;

@@ -1,11 +1,11 @@
 "use client";
 import UserProfileCard from "@/app/_component/UserProfileCard";
 import UserProfileForm from "@/app/_component/UserProfileForm";
+import { getCurrentUser, updateAllUsers } from "@/app/_lib/localStorage";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import PageHeader from "../../_component/PageHeader";
-import { getCurrentUser, getUsers, updateAllUsers } from "@/app/_lib/localStorage";
 
 export default function Page() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function Page() {
     } else {
       router.push("/auth/signIn");
     }
-  }, [router]);
+  }, []);
 
   const handleChange = (
     field: "username" | "email",
@@ -82,9 +82,9 @@ export default function Page() {
         <PageHeader title="Account Settings" />
 
         <div className="mt-6 grid md:grid-cols-3 gap-6">
-          {/* Left Sidebar - Profile Info */}
+          
           <div className="md:col-span-1 space-y-6">
-            {/* Profile Card */}
+            
             <UserProfileCard
               username={formData.username}
               email={formData.email}
@@ -95,9 +95,9 @@ export default function Page() {
           </div>
 
           <div className="md:col-span-2">
-            <div className="bg-white rounded-xl shadow-md border border-[var(--border-color)] p-6 md:p-8">
+            <div className="bg-white rounded-xl shadow-md border border-(--border-color) p-6 md:p-8">
               <div className="mb-6">
-                <h2 className="text-2xl font-bold text-[var(--font-color)] mb-2">
+                <h2 className="text-2xl font-bold text-(--font-color) mb-2">
                   Profile Information
                 </h2>
                 <p className="text-gray-600 text-sm">

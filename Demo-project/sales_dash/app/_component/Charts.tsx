@@ -71,26 +71,6 @@ export default function Charts() {
         dailyData[d].income += Number(order.amount);
       });
 
-      
-
-      // const dailyChart = Object.entries(dailyData).map(([date, v]) => ({
-      //   date,
-      //   orders: v.orders,
-      //   income: v.income,
-      // }));
-
-      // const monthlyChart = Object.entries(monthlyDate).map(([date, v]) => ({
-      //   date,
-      //   orders: v.orders,
-      //   income: v.income,
-      // }));  
-
-      // const weeklyChart = Object.entries(weeklyData).map(([date, v]) => ({
-      //   date,
-      //   orders: v.orders,
-      //   income: v.income,
-      // })); 
-
        setData({
         dailyChart: Object.values(dailyData),
         monthlyChart: Object.values(monthlyDate),

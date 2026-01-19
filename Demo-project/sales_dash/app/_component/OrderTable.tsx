@@ -4,7 +4,7 @@ import { deleteOrder, editOrder } from "../_lib/localStorage";
 import { Order } from "../_types/order";
 import TableCrud from "./TableCrud";
 
-export default function OrderTable({orders, onRefresh}: {orders: Order[], onRefresh?: () => void }) {
+export default function   OrderTable({orders, onRefresh}: {orders: Order[], onRefresh?: () => void }) {
 
   if(!orders) return null;
 

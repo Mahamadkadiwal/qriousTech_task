@@ -1,4 +1,3 @@
-import React from 'react'
 import { TableProps } from '../_types/table'
 
 export default function Table<T extends {isNew?: boolean}>({data, columns, renderCell, onRowClick }: TableProps<T>) {
@@ -19,12 +18,13 @@ export default function Table<T extends {isNew?: boolean}>({data, columns, rende
                 onClick={() => onRowClick?.(row)}
                 >
                     {columns.map((col) => ( 
-                        <td key={col.key as string} className="px-4 py-2 text-sm
+                        <td key={String(col.key)} className="px-4 py-2 text-sm
                         text-(--table-data-font-color) border-b border-(--border-color)">
-                            {renderCell 
-                            ? renderCell(row, col.key as string, rowIndex) 
-                            : (row as any)[col.key as string]
-                        }
+                            {renderCell
+                            ? renderCell(row, col.key, rowIndex)
+                            : col.key === "actions"
+                            ? null
+                            : String(row[col.key])}
                      </td>
                     ))}
                 </tr>

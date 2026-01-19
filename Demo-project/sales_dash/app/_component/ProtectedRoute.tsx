@@ -1,26 +1,36 @@
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-import { getCurrentAdmin, getCurrentUser } from '../_lib/localStorage';
+"use client";
 
-export default function ProtectedRoute({children, role}: {
-    children: React.ReactNode,
-    role: 'admin' | 'user'
-}) {
-    const router = useRouter();
-    const [allowed, setAllowed] = useState(false);
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getCurrentAdmin, getCurrentUser } from "../_lib/localStorage";
 
-    useEffect(() => {
-        const admin = getCurrentAdmin();
-        const user = getCurrentUser();
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  role: "admin" | "user";
+}
 
-        if(role === 'admin' && admin) setAllowed(true);
-        else if(role === 'user' && user) setAllowed(true);
-        else router.replace('/auth/signIn');
+export default function ProtectedRoute({
+  children,
+  role,
+}: ProtectedRouteProps) {
+  const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
-    }, []);
+  useEffect(() => {
+    const admin = getCurrentAdmin();
+    const user = getCurrentUser();
 
-    if(!allowed){
-        return null;
+    if (role === "admin" && admin) {
+      setIsAuthorized(true);
+    } else if (role === "user" && user) {
+      setIsAuthorized(true);
+    } else {
+      setIsAuthorized(false);
+      router.replace("/auth/signIn");
     }
-    return children;
+  }, [role, router]);
+
+  if (isAuthorized === null) return null;
+
+  return <>{children}</>;
 }

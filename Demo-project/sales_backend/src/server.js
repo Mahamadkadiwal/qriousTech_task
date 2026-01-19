@@ -1,6 +1,6 @@
 const app = require('./app'); 
 const { connectDB, sequelize } = require('./config/db');
-require('./models/user.model');
+// require('./models/user.model');
 
 connectDB();
 

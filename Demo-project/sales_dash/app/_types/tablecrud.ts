@@ -10,3 +10,13 @@ export interface TableCrudProps<T extends {id: string | number}>{
     onDelete?: (id: T["id"]) => void;
     onSave: (id: T["id"], updated: T) => void;
 }
+
+export function isRenderable(value: unknown): value is React.ReactNode {
+  return (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    value === null ||
+    value === undefined
+  );
+}

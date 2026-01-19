@@ -75,7 +75,7 @@ export default function Page() {
       });
     }
   return (
-    <div className="bg-background min-h-screen p-2">
+    <div className="bg-white min-h-screen p-2">
           <PageHeader title="Products" btnText="Add Products" onClick={handleClick} />
     
           <div className="mt-2">
