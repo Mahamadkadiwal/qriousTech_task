@@ -8,6 +8,7 @@ import Input from "../../_component/Input";
 import { addOrder, getOrders, getProduct } from "../../_lib/localStorage";
 import { Order } from "@/app/_types/order";
 import { Product } from "@/app/_types/Product";
+import { Status } from "@/app/_types/input";
 
 export default function page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -119,7 +120,7 @@ export default function page() {
             name="status"
             className="w-full text-(--font-color) border p-2 rounded"
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setFormData({ ...formData, status: e.target.value })
+                setFormData({ ...formData, status: e.target.value as Status })
             }
             defaultValue="Pending"
           >

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { addOrder, getCurrentUser, getProduct } from "../_lib/localStorage";
 import { Product } from "../_types/Product";
+import { Status } from "../_types/input";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,7 +26,7 @@ export default function Page() {
       product_name: product.name,
       amount: product.price,
       order_date: new Date().toISOString().split('T')[0],
-      status: "Pending",
+      status: "Pending" as Status,
       isNew: true,
     };
     try{
