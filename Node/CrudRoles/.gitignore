@@ -1,0 +1,76 @@
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# -----------------------
+# Logs
+# -----------------------
+logs/
+*.log
+
+# -----------------------
+# Runtime data
+# -----------------------
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# -----------------------
+# Coverage / testing
+# -----------------------
+coverage/
+.nyc_output/
+
+# -----------------------
+# Build output
+# -----------------------
+dist/
+build/
+
+# -----------------------
+# OS files
+# -----------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------
+# IDE / Editor
+# -----------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------
+# Sequelize
+# -----------------------
+sequelize.sqlite
+*.sqlite
+
+# -----------------------
+# Uploads (if using multer)
+# -----------------------
+uploads/
+public/uploads/
+
+# -----------------------
+# Next.js (if used)
+# -----------------------
+.next/
+out/
+
+# -----------------------
+# Cache
+# -----------------------
+.cache/
+.eslintcache

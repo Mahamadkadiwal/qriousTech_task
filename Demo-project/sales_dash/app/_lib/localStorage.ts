@@ -100,6 +100,7 @@ export function addOrder(data: Order): void{
         throw new Error("Invalid order data");
     }
     orders.push(data);
+
     localStorage.setItem("orders", JSON.stringify(orders));
 }
 
