@@ -11,9 +11,9 @@ import { RegisterUserDto } from './dto/registerUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { Roles } from '../common/decorator/auth.decorator';
-import { RolesGuard } from './role.guard';
-import { Permission } from './permission.decorator';
-import { PermissionsGuard } from './permission.guard';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { PermissionsGuard } from 'src/common/guards/permission.guard';
+import { Permission } from 'src/common/decorator/permission.decorator';
 
 @Controller('auth')
 export class AuthController {

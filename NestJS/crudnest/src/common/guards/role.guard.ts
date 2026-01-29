@@ -25,6 +25,8 @@ export class RolesGuard implements CanActivate {
 
     const userRoleNames = user?.roles.map((r) => r?.roleName);
 
-    return requiredRoles.some((role) => userRoleNames.includes(role));
+    return requiredRoles.some(
+      (role) => userRoleNames.includes(role) || role === 'admin',
+    );
   }
 }

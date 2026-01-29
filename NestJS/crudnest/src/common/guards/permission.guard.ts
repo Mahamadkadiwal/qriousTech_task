@@ -26,6 +26,12 @@ export class PermissionsGuard implements CanActivate {
     }
 
     const roleIds = user?.roles.map((r) => r?.roleId);
+    const rolesNames = user?.roles.map((r) => r?.roleName);
+
+    if (rolesNames.includes('admin')) {
+      return true;
+    }
+
     const userPermissions =
       await this.permissionService.getPermissionByUserId(roleIds);
 

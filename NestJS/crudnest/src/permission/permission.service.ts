@@ -1,21 +1,14 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { RolePermission } from 'src/roles/models/role_permission.model';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
-import { InjectModel } from '@nestjs/sequelize';
 import { Permission } from './models/permission.model';
-import { AssignPerDto } from './dto/assign-per.dto';
-import { RolesService } from 'src/roles/roles.service';
-import { RolePermission } from 'src/roles/models/role_permission.model';
 
 @Injectable()
 export class PermissionService {
   constructor(
     @InjectModel(Permission) private permissionModel: typeof Permission,
-    private readonly roleService: RolesService,
   ) {}
   async create(createPermissionDto: CreatePermissionDto) {
     const permission = await this.permissionModel.create(createPermissionDto);
@@ -73,30 +66,6 @@ export class PermissionService {
     return {
       message: 'Role deleted successfully',
     };
-  }
-
-  async assignPermission(assignPerDto: AssignPerDto) {
-    const role = await this.roleService.findByRole(assignPerDto.role);
-
-    const permission = await this.findByPermission(
-      assignPerDto.feature,
-      assignPerDto.permission,
-    );
-
-    const exists = await RolePermission.findOne({
-      where: {
-        role_id: role.role_id,
-        permission_id: permission.permission_id,
-      },
-    });
-
-    if (exists) {
-      throw new ConflictException('Permission already assigned to this role');
-    }
-
-    await role.$add('permissions', permission);
-
-    return { message: 'Permission assigned successfully' };
   }
 
   async getPermissionByUserId(roleIds: number[]) {

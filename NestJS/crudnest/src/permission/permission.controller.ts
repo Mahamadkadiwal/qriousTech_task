@@ -8,15 +8,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Roles } from 'src/common/decorator/auth.decorator';
+import { Permission } from 'src/common/decorator/permission.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { RolesGuard } from 'src/auth/role.guard';
-import { AssignPerDto } from './dto/assign-per.dto';
+import { PermissionsGuard } from 'src/common/guards/permission.guard';
+import { RolesGuard } from 'src/common/guards/role.guard';
 import { CreatePermissionDto } from './dto/create-permission.dto';
 import { UpdatePermissionDto } from './dto/update-permission.dto';
 import { PermissionService } from './permission.service';
-import { Roles } from 'src/common/decorator/auth.decorator';
-import { Permission } from 'src/auth/permission.decorator';
-import { PermissionsGuard } from 'src/auth/permission.guard';
 
 @Controller('permission')
 export class PermissionController {
@@ -30,16 +29,22 @@ export class PermissionController {
     return await this.permissionService.create(createPermissionDto);
   }
 
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('permission', 'view')
   @Get()
   async findAll() {
     return await this.permissionService.findAll();
   }
 
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('permission', 'view')
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.permissionService.getPermissionById(+id);
   }
 
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('permission', 'update')
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -48,13 +53,10 @@ export class PermissionController {
     return await this.permissionService.update(+id, updatePermissionDto);
   }
 
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('permission', 'delete')
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.permissionService.remove(+id);
-  }
-
-  @Post('assign')
-  async assignPermission(@Body() assignPerDto: AssignPerDto) {
-    return await this.permissionService.assignPermission(assignPerDto);
   }
 }
