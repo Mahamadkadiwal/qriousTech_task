@@ -20,4 +20,8 @@ export class RegisterUserDto {
   @MaxLength(20, { message: 'Password must be at most 20 characters' })
   @IsString()
   password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  roleName: string;
 }

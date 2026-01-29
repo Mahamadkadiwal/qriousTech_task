@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { RoleDto } from './dto/role.dto';
-import { Role } from './roles.model';
+import { Role } from './models/roles.model';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
@@ -21,6 +21,31 @@ export class RolesService {
 
   async getRoleById(id: number) {
     const role = await this.roleModel.findByPk(id);
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+    return role;
+  }
+
+  async findByRole(roleName: string) {
+    const role = await this.roleModel.findOne({
+      where: {
+        name: roleName,
+      },
+      attributes: ['role_id'],
+    });
+
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+    return role;
+  }
+
+  async getRoleByName(roleName: string) {
+    const role = await this.roleModel.findOne({
+      where: { name: roleName },
+    });
+
     if (!role) {
       throw new NotFoundException('Role not found');
     }

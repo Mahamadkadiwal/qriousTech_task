@@ -9,7 +9,11 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/registerUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { Roles } from '../common/decorator/auth.decorator';
+import { RolesGuard } from './role.guard';
+import { Permission } from './permission.decorator';
+import { PermissionsGuard } from './permission.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -26,7 +30,9 @@ export class AuthController {
     return token;
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
+  @Roles('user')
+  @Permission('permission', 'add')
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

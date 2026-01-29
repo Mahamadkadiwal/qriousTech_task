@@ -16,12 +16,12 @@ export class AuthService {
   async registerUser(registerDto: RegisterUserDto) {
     const hash = await this.hashService.hashPassword(registerDto.password);
 
-    const user = await this.userService.createUser({
+    const { user, role } = await this.userService.createUser({
       ...registerDto,
       password: hash,
     });
 
-    const payload = { sub: user.user_id };
+    const payload = { sub: user.user_id, roleId: role.role_id };
     const token = await this.jwtService.signAsync(payload);
 
     return { access_token: token };
@@ -43,7 +43,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = { sub: user.user_id };
+    const roles =
+      user.roles?.map((role) => ({
+        roleId: role.role_id,
+        roleName: role.name,
+      })) || [];
+
+    const payload = { sub: user.user_id, roles: roles };
 
     const token = await this.jwtService.signAsync(payload);
 

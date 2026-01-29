@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { RoleDto } from './dto/role.dto';
 import { RolesService } from './roles.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { RolesGuard } from 'src/auth/role.guard';
+import { PermissionsGuard } from 'src/auth/permission.guard';
+import { Roles } from 'src/common/decorator/auth.decorator';
+import { Permission } from 'src/auth/permission.decorator';
 
 @Controller('roles')
 export class RolesController {
@@ -35,7 +39,6 @@ export class RolesController {
     return this.roleService.getRoleById(id);
   }
 
-  @UseGuards(AuthGuard)
   @Put(':id')
   async updateRole(@Param('id') id: number, @Body() roleDto: RoleDto) {
     return this.roleService.updateRole(id, roleDto);

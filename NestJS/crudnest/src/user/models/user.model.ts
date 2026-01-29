@@ -1,5 +1,13 @@
 import { Optional } from 'sequelize';
-import { Column, Model, Table, DataType } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  DataType,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { Role } from 'src/roles/models/roles.model';
+import { UserRole } from './user_role.model';
 
 export interface UserAttributes {
   user_id: number;
@@ -8,10 +16,7 @@ export interface UserAttributes {
   password: string;
 }
 
-export interface UserCreationAttributes extends Optional<
-  UserAttributes,
-  'user_id'
-> {}
+export type UserCreationAttributes = Optional<UserAttributes, 'user_id'>;
 
 @Table({
   tableName: 'users',
@@ -45,9 +50,6 @@ export class User extends Model<UserAttributes, UserCreationAttributes> {
   })
   declare password: string;
 
-  //   @Column(DataType.DATE)
-  //   createdAt: Date;
-
-  //   @Column(DataType.DATE)
-  //   updatedAt: Date;
+  @BelongsToMany(() => Role, () => UserRole)
+  declare roles: Role[];
 }
