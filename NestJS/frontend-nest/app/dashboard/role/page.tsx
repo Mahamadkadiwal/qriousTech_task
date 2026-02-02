@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { createRole, getRoles, updateRole } from './action';
 import toast from 'react-hot-toast';
 
-type Role = {
+export type Role = {
     role_id: number;
     name: string;
 };
@@ -117,7 +117,7 @@ export default function Page() {
                 showButton={hasPermission(permissions, "role", "add", roles)}
             />
 
-            <RoleTable loading={loading} error={error} roles={rolesData} onEdit={openEdit} />
+            <RoleTable loading={loading} error={error} roles={rolesData} onEdit={openEdit} showEditButton={hasPermission(permissions, "role", "update", roles)} />
 
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={editId ? "Edit Role" : "Add Role"}>
                 <input

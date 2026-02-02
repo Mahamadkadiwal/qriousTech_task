@@ -18,12 +18,14 @@ export default function AssignPermissions({
     onEdit,
     permissions,
     loading,
-    error
+    error,
+    showEditButton = true,
 }: {
     onEdit?: (id: number, role: string, feature: string, permission: string) => void;
     permissions: assignPermission[];
     loading: boolean;
     error: string | null;
+    showEditButton?: boolean;
 }) {
 
     if (loading) return <p className="text-gray-400 px-4 py-2">Loading permissions...</p>;
@@ -61,7 +63,7 @@ export default function AssignPermissions({
                             <td className="px-4 py-2 text-gray-200 font-medium">{permission.Permission.feature}</td>
                             <td className="px-4 py-2">{permission.Permission.name}</td>
                             <td className="px-4 py-2">
-                                <button
+                                {showEditButton && (<button
                                     onClick={() =>
                                         onEdit &&
                                         onEdit(
@@ -77,7 +79,7 @@ export default function AssignPermissions({
                     transition-all duration-200"
                                 >
                                     Edit
-                                </button>
+                                </button>)}
                             </td>
                         </tr>
                     ))}

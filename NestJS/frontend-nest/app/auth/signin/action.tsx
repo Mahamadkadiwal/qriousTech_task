@@ -16,7 +16,7 @@ export async function loginAction(email: string, password: string) {
 
     const data = await res.json();
     if (!res.ok) {
-        return { error: data.message || "Login failed" };
+        return { response: data || "Login failed" };
     }
 
     (await cookies()).set("access_token", data.access_token, {

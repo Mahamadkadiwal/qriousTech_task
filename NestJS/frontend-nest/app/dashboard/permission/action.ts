@@ -17,6 +17,8 @@ export async function getPermissions() {
     cache: "no-store",
   });
 
+  console.log(res);
+
   if (res.status === 401) {
     await handleAccessToken();
   }

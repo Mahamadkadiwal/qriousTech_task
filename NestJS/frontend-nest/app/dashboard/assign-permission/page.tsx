@@ -7,6 +7,10 @@ import toast from 'react-hot-toast';
 import { getPermissions } from '../permission/action';
 import { getRoles } from '../role/action';
 import { assignPermission, editAssignedPermission, getAssignPermissions } from './action';
+import { hasPermission } from '@/app/_lib/permission';
+import { getCookiesValue } from '@/app/_lib/getCookiesValue';
+import { Role } from '../role/page';
+import { Permission } from '../permission/page';
 
 export default function Page() {
   const [permissionAssignData, setPermissionAssignData] = useState([]);
@@ -21,6 +25,9 @@ export default function Page() {
 
   const [rolesData, setRolesData] = useState([]);
   const [permissionsData, setPermissionsData] = useState([]);
+
+  const [permissions, setPermissions] = useState([]);
+  const [roles, setRoles] = useState([]);
 
   async function fetchRoles() {
     const res = await getRoles();
@@ -110,6 +117,16 @@ export default function Page() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    async function load() {
+      const { permissions, roles } = await getCookiesValue();
+      setPermissions(permissions);
+      setRoles(roles);
+    }
+
+    load();
+  }, []);
+
   const handleSave = async () => {
     try {
       if (!feature.trim() || !role.trim() || !permission.trim()) {
@@ -160,9 +177,10 @@ export default function Page() {
         title="Assign Permissions"
         buttonText="Add Permissions"
         onAddClick={openAdd}
+        showButton={hasPermission(permissions, "assign", "add", roles)}
       />
 
-      <AssignPermissions loading={loading} error={error} permissions={permissionAssignData} onEdit={openEdit} />
+      <AssignPermissions loading={loading} error={error} permissions={permissionAssignData} onEdit={openEdit} showEditButton={hasPermission(permissions, "assign", "update", roles)} />
 
       <Modal
         isOpen={isOpen}
@@ -170,19 +188,19 @@ export default function Page() {
         title={editId ? "Edit Permission" : "Add Permission"}
       >
         <select className="w-full px-4 py-2 border border-gray-600 rounded-md bg-[#0f172a] text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" value={role} onChange={(e) => setRole(e.target.value)}>
-          {rolesData.map((role: any) => (
+          {rolesData.map((role: Role) => (
             <option key={role.role_id} value={role.name}>{role.name}</option>
           ))}
         </select>
 
         <select className='w-full px-4 py-2 border border-gray-600 rounded-md bg-[#0f172a] text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4' value={feature} onChange={(e) => setFeature(e.target.value)}>
-          {permissionsData.map((perm: any) => (
+          {permissionsData.map((perm: Permission) => (
             <option key={perm.permission_id} value={perm.feature}>{perm.feature}</option>
           ))}
         </select>
 
         <select className='w-full px-4 py-2 border border-gray-600 rounded-md bg-[#0f172a] text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4' value={permission} onChange={(e) => setPermission(e.target.value)}>
-          {permissionsData.map((perm: any) => (
+          {permissionsData.map((perm: Permission) => (
             <option key={perm.permission_id} value={perm.name}>{perm.name}</option>
           ))}
         </select>

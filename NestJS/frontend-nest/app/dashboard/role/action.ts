@@ -46,6 +46,9 @@ export async function createRole(name: string) {
   if (res.status === 401) {
     await handleAccessToken();
   }
+  if (res.status === 403) {
+    return { success: false, error: "You are not authorized to create roles." };
+  }
   if (!res.ok) {
     return { success: false, error: "Failed to create role" };
   }

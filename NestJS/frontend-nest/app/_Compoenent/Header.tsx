@@ -22,6 +22,7 @@ export default function Header() {
             <div className='space-x-6'>
                 <Link className='text-xl' href="/dashboard/role">Roles</Link>
                 <Link className='text-xl' href="/dashboard/permission">Permissions</Link>
+                <Link className='text-xl' href="/dashboard/assign-permission">Assign</Link>
             </div>
             <button onClick={handleLogout}
                 className="px-5 py-2 rounded-lg border border-gray-600 text-gray-200

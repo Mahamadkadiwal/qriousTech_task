@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react';
 import { loginAction } from '../auth/signin/action';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function SignInForm() {
     const router = useRouter();
@@ -16,9 +17,10 @@ export default function SignInForm() {
         setLoading(true);
         const result = await loginAction(email, password);
         setLoading(false);
-
         if (result?.success) {
             router.push("/dashboard");
+        } else {
+            toast.error(result?.response?.message || "Login failed");
         }
     }
 

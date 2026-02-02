@@ -10,12 +10,14 @@ export default function PermissionTable({
   onEdit,
   permissions,
   loading,
-  error
+  error,
+  showEditButton = true
 }: {
   onEdit: (id: number, feature: string, name: string) => void;
   permissions: Permission[];
   loading: boolean;
   error: string | null;
+  showEditButton?: boolean;
 }) {
 
   if (loading) {
@@ -68,7 +70,7 @@ export default function PermissionTable({
               </td>
 
               <td className="px-4 py-2">
-                <button
+                {showEditButton && (<button
                   onClick={() =>
                     onEdit(
                       permission.permission_id,
@@ -82,7 +84,7 @@ export default function PermissionTable({
                     transition-all duration-200"
                 >
                   Edit
-                </button>
+                </button>)}
               </td>
             </tr>
           ))}

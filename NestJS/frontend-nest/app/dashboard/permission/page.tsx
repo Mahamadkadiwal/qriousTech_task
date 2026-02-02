@@ -8,7 +8,7 @@ import { createPermission, getPermissions, updatePermission } from './action';
 import { hasPermission } from '@/app/_lib/permission';
 import toast from 'react-hot-toast';
 
-type Permission = {
+export type Permission = {
     permission_id: number;
     feature: string;
     name: string;
@@ -132,7 +132,7 @@ export default function Page() {
                 showButton={hasPermission(permissions, "role", "add", roles)}
             />
 
-            <PermissionTable loading={loading} error={error} permissions={permissionData} onEdit={openEdit} />
+            <PermissionTable loading={loading} error={error} permissions={permissionData} onEdit={openEdit} showEditButton={hasPermission(permissions, "permission", "update", roles )} />
 
             <Modal
                 isOpen={isOpen}

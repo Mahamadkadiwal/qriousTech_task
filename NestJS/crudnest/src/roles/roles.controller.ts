@@ -65,7 +65,7 @@ export class RolesController {
 
   @UseGuards(AuthGuard, PermissionsGuard)
   @Roles('admin')
-  @Permission('role', 'add')
+  @Permission('assign', 'add')
   @Post('assign')
   async assignPermission(@Body() assignPerDto: AssignPerDto) {
     return await this.roleService.assignPermission(assignPerDto);
@@ -73,7 +73,7 @@ export class RolesController {
 
   @UseGuards(AuthGuard, PermissionsGuard)
   @Roles('admin')
-  @Permission('role', 'update')
+  @Permission('assign', 'update')
   @Put('assign/:id')
   async editAssignedPermission(
     @Param('id') id: number,
