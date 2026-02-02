@@ -1,8 +1,7 @@
-import React from 'react'
-import RoleTable from '../_Compoenent/RoleTable'
-import PermissionTable from '../_Compoenent/PermissionTable'
+import { getCookiesValue } from '../_lib/getCookiesValue';
 
-export default function Page() {
+export default async function Page() {
+    const { permissions, roles } = await getCookiesValue();
     return (
         <div className="space-y-8">
 
@@ -12,29 +11,7 @@ export default function Page() {
                 </h2>
             </div>
 
-            <div className="bg-[#020617] border border-gray-700 rounded-xl shadow-lg p-6">
-                <div className='flex justify-between px-4'>
-                    <h3 className="text-xl font-semibold text-white mb-4">
-                        Roles
-                    </h3>
-                    <button className='px-4 py-1.5 text-sm rounded-md border border-blue-950 text-blue-900
-                    hover:bg-blue-900 hover:text-white
-                    transition-all duration-200'>Add Roles</button>
-                </div>
-                <RoleTable />
-            </div>
 
-            <div className="bg-[#020617] border border-gray-700 rounded-xl shadow-lg p-6">
-                <div className='flex justify-between px-4'>
-                    <h3 className="text-xl font-semibold text-white mb-4">
-                        Permission
-                    </h3>
-                    <button className='px-4 py-1.5 text-sm rounded-md border border-blue-950 text-blue-900
-                    hover:bg-blue-900 hover:text-white
-                    transition-all duration-200'>Add Permission</button>
-                </div>
-                <PermissionTable />
-            </div>
 
         </div>
     )

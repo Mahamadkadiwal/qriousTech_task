@@ -1,6 +1,18 @@
+
+"use client";
 import Link from 'next/link'
+import { useRouter } from 'next/navigation';
+import { logoutAction } from '../auth/logout/action';
 
 export default function Header() {
+    const router = useRouter();
+    const handleLogout = async () => {
+        const response = await logoutAction();
+        if (response.success) {
+
+            router.push('/');
+        }
+    }
     return (
         <header className="w-full px-6 py-4 bg-[#020617] border-b border-gray-700 flex justify-between items-center shadow-sm">
 
@@ -11,7 +23,7 @@ export default function Header() {
                 <Link className='text-xl' href="/dashboard/role">Roles</Link>
                 <Link className='text-xl' href="/dashboard/permission">Permissions</Link>
             </div>
-            <button
+            <button onClick={handleLogout}
                 className="px-5 py-2 rounded-lg border border-gray-600 text-gray-200
                    bg-[#020617] hover:bg-red-800 hover:border-red-800
                    hover:text-white transition-all duration-200

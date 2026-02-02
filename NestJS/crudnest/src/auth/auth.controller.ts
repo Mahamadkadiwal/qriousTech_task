@@ -30,6 +30,14 @@ export class AuthController {
     return token;
   }
 
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles('admin')
+  @Permission('users', 'get')
+  @Get('users')
+  async getAllUsers() {
+    return await this.authService.getAllUsers();
+  }
+
   @UseGuards(AuthGuard, RolesGuard, PermissionsGuard)
   @Roles('user')
   @Permission('permission', 'add')

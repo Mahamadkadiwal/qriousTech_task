@@ -1,10 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UniqueConstraintError } from 'sequelize';
+import { Op, Sequelize, UniqueConstraintError } from 'sequelize';
 import { RegisterUserDto } from 'src/auth/dto/registerUser.dto';
+import { Permission } from 'src/permission/models/permission.model';
+import { Role } from 'src/roles/models/roles.model';
 import { RolesService } from 'src/roles/roles.service';
 import { User } from './models/user.model';
-import { Role } from 'src/roles/models/roles.model';
 
 @Injectable()
 export class UserService {
@@ -39,7 +40,27 @@ export class UserService {
   }
 
   async fetchAll() {
-    return this.userModel.findAll();
+    return this.userModel.findAll({
+      attributes: ['user_id', 'username', 'email'],
+      where: {
+        user_id: {
+          [Op.notIn]: Sequelize.literal(`(
+          SELECT ur.user_id
+          FROM user_roles ur
+          JOIN roles r ON r.role_id = ur.role_id
+          WHERE r.name = 'admin'
+        )`),
+        },
+      },
+      include: [
+        {
+          model: Role,
+          attributes: ['role_id', 'name'],
+          through: { attributes: [] },
+          required: false,
+        },
+      ],
+    });
   }
 
   async findByEmail(email: string) {
@@ -50,6 +71,13 @@ export class UserService {
           model: Role,
           attributes: ['role_id', 'name'],
           through: { attributes: [] },
+          include: [
+            {
+              model: Permission,
+              attributes: ['permission_id', 'feature', 'name'],
+              through: { attributes: [] },
+            },
+          ],
         },
       ],
     });

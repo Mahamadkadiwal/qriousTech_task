@@ -14,7 +14,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/1 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-[#020617] w-full max-w-md rounded-xl 
         border border-gray-700 shadow-2xl p-6 relative">
         <div className="flex justify-between items-center mb-4">

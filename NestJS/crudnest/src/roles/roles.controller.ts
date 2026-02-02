@@ -37,6 +37,11 @@ export class RolesController {
     return this.roleService.getAllRoles();
   }
 
+  @Get('getAssign')
+  async getAssignPermission() {
+    return await this.roleService.getAssignedPermissions();
+  }
+
   @UseGuards(AuthGuard, PermissionsGuard)
   @Permission('role', 'view')
   @Get(':id')
@@ -58,8 +63,22 @@ export class RolesController {
     return this.roleService.deleteRole(id);
   }
 
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Roles('admin')
+  @Permission('role', 'add')
   @Post('assign')
   async assignPermission(@Body() assignPerDto: AssignPerDto) {
     return await this.roleService.assignPermission(assignPerDto);
+  }
+
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Roles('admin')
+  @Permission('role', 'update')
+  @Put('assign/:id')
+  async editAssignedPermission(
+    @Param('id') id: number,
+    @Body() assignPerDto: AssignPerDto,
+  ) {
+    return await this.roleService.editAssignedPermission(id, assignPerDto);
   }
 }

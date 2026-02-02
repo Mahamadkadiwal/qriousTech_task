@@ -9,6 +9,7 @@ import { PermissionService } from 'src/permission/permission.service';
 import { RoleDto } from './dto/role.dto';
 import { RolePermission } from './models/role_permission.model';
 import { Role } from './models/roles.model';
+import { Permission } from 'src/permission/models/permission.model';
 
 @Injectable()
 export class RolesService {
@@ -98,5 +99,56 @@ export class RolesService {
     await role.$add('permissions', permission);
 
     return { message: 'Permission assigned successfully' };
+  }
+
+  async editAssignedPermission(id: number, assignPerDto: AssignPerDto) {
+    const rolePermission = await RolePermission.findByPk(id);
+
+    if (!rolePermission) {
+      throw new NotFoundException('Assigned permission not found');
+    }
+
+    const role = await this.findByRole(assignPerDto.role);
+
+    const permission = await this.permissionService.findByPermission(
+      assignPerDto.feature,
+      assignPerDto.permission,
+    );
+
+    const exists = await RolePermission.findOne({
+      where: {
+        role_id: role.role_id,
+        permission_id: permission.permission_id,
+      },
+    });
+
+    if (exists && exists.role_per_id !== id) {
+      throw new ConflictException('Permission already assigned to this role');
+    }
+
+    await rolePermission.update({
+      role_id: role.role_id,
+      permission_id: permission.permission_id,
+    });
+
+    return { message: 'Assigned permission updated successfully' };
+  }
+
+  async getAssignedPermissions() {
+    const permissions = await RolePermission.findAll({
+      attributes: ['role_per_id', 'role_id', 'permission_id'],
+      include: [
+        {
+          model: Role,
+          attributes: ['role_id', 'name'],
+        },
+        {
+          model: Permission,
+          attributes: ['permission_id', 'feature', 'name'],
+        },
+      ],
+    });
+
+    return permissions;
   }
 }

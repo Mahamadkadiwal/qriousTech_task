@@ -1,23 +1,16 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PermissionService } from 'src/permission/permission.service';
-import { PERMISSION_KEY } from '../decorator/permission.decorator';
 import { JwtUser, PermissionObj } from 'src/auth/interface/user.interface';
+import { PERMISSION_KEY } from '../decorator/permission.decorator';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly permissionService: PermissionService,
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPermissions = this.reflector.getAllAndOverride<
       PermissionObj[]
     >(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
-    if (!requiredPermissions) {
-      return true;
-    }
 
     const { user }: { user: JwtUser } = context.switchToHttp().getRequest();
 
@@ -25,23 +18,17 @@ export class PermissionsGuard implements CanActivate {
       return false;
     }
 
-    const roleIds = user?.roles.map((r) => r?.roleId);
-    const rolesNames = user?.roles.map((r) => r?.roleName);
-
-    if (rolesNames.includes('admin')) {
+    if (user.roles?.some((r) => r.roleName === 'admin')) {
       return true;
     }
 
-    const userPermissions =
-      await this.permissionService.getPermissionByUserId(roleIds);
-
-    console.log('permission', userPermissions);
+    const permissions = user.permissions || [];
 
     return requiredPermissions.some((reqPerm) =>
-      userPermissions.some(
+      permissions.some(
         (userPerm) =>
           userPerm.feature === reqPerm?.feature &&
-          userPerm.name === reqPerm?.name,
+          userPerm.permission === reqPerm?.name,
       ),
     );
   }

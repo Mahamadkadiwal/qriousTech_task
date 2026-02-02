@@ -49,10 +49,33 @@ export class AuthService {
         roleName: role.name,
       })) || [];
 
-    const payload = { sub: user.user_id, roles: roles };
+    const permissions =
+      user.roles?.flatMap((role) =>
+        role.permissions?.map((permission) => ({
+          permission_id: permission.permission_id,
+          feature: permission.feature,
+          permission: permission.name,
+        })),
+      ) || [];
+
+    const payload = {
+      sub: user.user_id,
+      roles: roles,
+      permissions: permissions,
+    };
 
     const token = await this.jwtService.signAsync(payload);
 
-    return { access_token: token };
+    return {
+      access_token: token,
+      userId: user.user_id,
+      permissions: permissions,
+      roles: roles,
+    };
+  }
+
+  async getAllUsers() {
+    const users = await this.userService.fetchAll();
+    return users;
   }
 }

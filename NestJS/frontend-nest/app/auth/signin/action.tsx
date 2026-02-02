@@ -1,5 +1,7 @@
 "use server";
 
+import { cookies } from "next/headers";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function loginAction(email: string, password: string) {
@@ -13,10 +15,30 @@ export async function loginAction(email: string, password: string) {
     });
 
     const data = await res.json();
-
     if (!res.ok) {
         return { error: data.message || "Login failed" };
     }
 
-    return { success: true, role: data.role };
+    (await cookies()).set("access_token", data.access_token, {
+        httpOnly: true,
+        secure: false,
+    });
+
+    (await cookies()).set("user", JSON.stringify(data.userId), {
+        httpOnly: false,
+        path: "/",
+    });
+
+    (await cookies()).set("permissions", JSON.stringify(data.permissions), {
+        httpOnly: false,
+        path: "/",
+    });
+
+
+    (await cookies()).set("roles", JSON.stringify(data.roles), {
+        httpOnly: false,
+        path: "/",
+    });
+
+    return { success: true };
 }

@@ -2,20 +2,25 @@
 import Link from 'next/link'
 import { useState } from 'react';
 import { loginAction } from '../auth/signin/action';
+import { useRouter } from 'next/navigation';
 
 export default function SignInForm() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Password:', password);
 
+        setLoading(true);
         const result = await loginAction(email, password);
-        console.log(result);
-    }
+        setLoading(false);
 
+        if (result?.success) {
+            router.push("/dashboard");
+        }
+    }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -26,7 +31,9 @@ export default function SignInForm() {
                     type="text"
                     placeholder='Email'
                     value={email}
+                    required
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={loading}
                 />
             </div>
 
@@ -37,16 +44,24 @@ export default function SignInForm() {
                     type="password"
                     placeholder='Password'
                     value={password}
+                    required
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={loading}
                 />
             </div>
 
             <button
-                className='w-full p-2 rounded-lg bg-blue-950 text-white font-semibold hover:bg-blue-900'
+                className={`w-full p-2 rounded-lg font-semibold transition
+                    ${loading
+                        ? "bg-gray-700 text-gray-300 cursor-not-allowed"
+                        : "bg-blue-950 text-white hover:bg-blue-900"
+                    }`}
                 type="submit"
+                disabled={loading}
             >
-                Sign In
+                {loading ? "Signing in..." : "Sign In"}
             </button>
+
             <div>
                 <p className='text-center text-white'>
                     Don&apos;t have an account? <Link href="/auth/signup" className='text-blue-800 hover:underline'>Sign Up</Link>
