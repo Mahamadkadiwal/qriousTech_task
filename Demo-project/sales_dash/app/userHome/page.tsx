@@ -2,9 +2,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { addOrder, getCurrentUser, getProduct } from "../_lib/localStorage";
+import { addCart, getCurrentUser, getProduct } from "../_lib/localStorage";
 import { Product } from "../_types/Product";
-import { Status } from "../_types/input";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,30 +14,26 @@ export default function Page() {
     setProducts(stored);
   }, []);
 
-  function handleOrder(product: Product) {
-    // alert(`Order placed for: ${product.name}`);
+  function addToCart(product: Product) {
     const user = getCurrentUser();
     setLoading(true);
 
     const data = {
       id: "",
-      customer_name : user ? user.username : "Guest",
+      customer_name: user ? user.username : "Guest",
       product_name: product.name,
       amount: product.price,
-      order_date: new Date().toISOString().split('T')[0],
-      status: "Pending" as Status,
-      isNew: true,
     };
-    try{
-      addOrder(data);
-      toast.success("Order placed successfully");
+    try {
+      addCart(data);
+      toast.success("Added to cart successfully");
       setLoading(false);
     } catch (error) {
       console.log("error", error);
-      toast.error("Failed to place order");
+      if (error instanceof Error)
+        toast.error(error?.message || "Failed to add to cart");
       setLoading(false);
     }
-
   }
 
   return (
@@ -57,7 +52,6 @@ export default function Page() {
             key={product.id}
             className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition p-4 flex items-center gap-4"
           >
-            {/* Product Image */}
             <div className="w-28 h-28 flex items-center justify-center">
               <Image
                 src={product.image}
@@ -67,8 +61,6 @@ export default function Page() {
                 className="h-full object-contain"
               />
             </div>
-
-           
             <div className="flex flex-col flex-1">
               <h3 className="text-lg font-semibold text-gray-800">
                 {product.name}
@@ -80,9 +72,9 @@ export default function Page() {
                 ₹ {product.price}
               </p>
 
-              <button type="button" onClick={() => handleOrder(product)}
-               className="mt-2 primary-btn w-fit transition">
-                {loading ? 'Ordering...' : 'Order Now'}
+              <button type="button" onClick={() => addToCart(product)}
+                className="mt-2 primary-btn w-fit transition">
+                {loading ? 'Adding...' : 'Add to cart'}
               </button>
             </div>
           </div>

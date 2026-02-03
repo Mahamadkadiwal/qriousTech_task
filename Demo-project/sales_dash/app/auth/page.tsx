@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import { BsBarChartFill } from "react-icons/bs";
-import { FaBoxOpen, FaChartLine, FaArrowRight } from "react-icons/fa";
-import { HiSparkles } from "react-icons/hi";
+import { FaArrowRight, FaBoxOpen, FaChartLine } from "react-icons/fa";
 
 export default function AuthLanding() {
   return (

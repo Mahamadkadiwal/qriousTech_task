@@ -46,7 +46,7 @@ export default function SignIn(){
 
     
     return (
-      <div className="min-h-screen from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
+      <div className="h-screen overflow-hidden from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
         <div className="relative w-full max-w-5xl">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-0">
             

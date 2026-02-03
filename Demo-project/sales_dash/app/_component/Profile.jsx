@@ -3,43 +3,40 @@
 import { useEffect, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { getCurrentAdmin, getCurrentUser } from "../_lib/localStorage";
-import {useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
 
-const Profile = ({user = ""}) => {
+const Profile = ({ user = "" }) => {
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
   const fetchUser = () => {
-    if(user === "user"){
+    if (user === "user") {
       const user = getCurrentUser();
-      if(user){
+      if (user) {
         setCurrentUser(user);
       }
-    }
-    else if(user === "admin"){
+    } else if (user === "admin") {
       const admin = getCurrentAdmin();
-      if(admin) setCurrentUser(admin);
+      if (admin) setCurrentUser(admin);
     }
-  }
+  };
 
   useEffect(() => {
     fetchUser();
-  }, [])
-
+  }, []);
 
   const handleLogout = () => {
-    if(user === "user"){
+    if (user === "user") {
       localStorage.removeItem("currentUser");
-      
-    } else if(user === "admin"){
-      localStorage.removeItem("currentAdmin")
+    } else if (user === "admin") {
+      localStorage.removeItem("currentAdmin");
     }
     toast.success("Logged out successfully");
     router.push("/auth/signIn");
-  }
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -52,7 +49,9 @@ const Profile = ({user = ""}) => {
         aria-label="Open Profile Menu"
       >
         <div className="w-10 h-10 mr-2 rounded-full flex items-center justify-center font-bold text-lg shadow-md  hover:scale-105 transition-transform duration-300 overflow-hidden">
-          <i className="text-2xl text-(--font-color)"><CiUser /></i>
+          <i className="text-2xl text-(--font-color)">
+            <CiUser />
+          </i>
         </div>
       </button>
 
@@ -70,17 +69,21 @@ const Profile = ({user = ""}) => {
           <ul className="py-2">
             <li>
               <Link
-                
-                href={`${user === "admin" ? "/dashboard/adminProfile" : "/dashboard/userProfile"}`}
+                href={`${user === "admin" ? "/dashboard/adminProfile" : "/userHome/userProfile"}`}
                 className="flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white"
                 onClick={() => {
                   // e.preventDefault();
                   setIsDropdownOpen(false);
                 }}
-              >Profile</Link>
+              >
+                Profile
+              </Link>
             </li>
             <li>
-              <button onClick={handleLogout} className="w-full flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center px-4 py-2 text-sm text-(--font-color) hover:bg-(--primary-btn) hover:text-white"
+              >
                 Logout
               </button>
             </li>

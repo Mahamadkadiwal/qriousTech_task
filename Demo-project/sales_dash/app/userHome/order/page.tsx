@@ -44,16 +44,7 @@ export default function Page() {
         }
         
     },[]);
-//   const orders = [
-//     {
-//       id: 1,
-//       name: "Samsung Galaxy A55",
-//       description: "Powerful smartphone with Super AMOLED display",
-//       price: 24999,
-//       status: "Delivered",
-//       image: "/products/samsunga55.webp"
-//     },
-//   ];
+
 
   return (
     <div className="min-h-full pt-2 pb-10 px-4 mx-30">

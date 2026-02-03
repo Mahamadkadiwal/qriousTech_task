@@ -3,6 +3,7 @@ import { deleteProduct, editProduct } from '../_lib/localStorage';
 import { Product } from '../_types/Product';
 import { Column } from '../_types/tablecrud';
 import TableCrud from './TableCrud';
+import { productSchema } from '../Schema/Product';
 
 export default function ProductTable({ products, onRefresh }: { products?: Product[], onRefresh?: () => void }) {
 
@@ -11,6 +12,13 @@ export default function ProductTable({ products, onRefresh }: { products?: Produ
 
   function handleSave(id: string, updatedRow: Product) {
     try {
+      const parsed = productSchema.safeParse(updatedRow);
+      if (!parsed.success) {
+        const firstError = parsed.error.issues[0]?.message;
+        toast.error(firstError || "Invalid data");
+        return;
+      }
+
       editProduct(id, updatedRow);
       onRefresh && onRefresh();
       toast.success('Product updated successfully');

@@ -9,3 +9,8 @@ export interface Order  {
     status: Status;
     isNew?: boolean;
 }
+
+export interface OrderWithDetails extends Order {
+    image?: string;
+    description?: string;
+}

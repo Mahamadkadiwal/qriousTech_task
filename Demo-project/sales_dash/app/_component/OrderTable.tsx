@@ -3,13 +3,21 @@ import toast from "react-hot-toast";
 import { deleteOrder, editOrder } from "../_lib/localStorage";
 import { Order } from "../_types/order";
 import TableCrud from "./TableCrud";
+import { orderSchema } from "../Schema/Order";
 
-export default function   OrderTable({orders, onRefresh}: {orders: Order[], onRefresh?: () => void }) {
+export default function OrderTable({ orders, onRefresh }: { orders: Order[], onRefresh?: () => void }) {
 
-  if(!orders) return null;
+  if (!orders) return null;
 
-  function handleSave(id: string, updatedRow: Order){
+  function handleSave(id: string, updatedRow: Order) {
     try {
+      const parsed = orderSchema.safeParse(updatedRow);
+      if (!parsed.success) {
+        const firstError = parsed.error.issues[0]?.message;
+        toast.error(firstError || "Invalid data");
+        return;
+      }
+
       editOrder(id, updatedRow);
       toast.success('Order updated successfully');
       onRefresh && onRefresh();
@@ -20,7 +28,7 @@ export default function   OrderTable({orders, onRefresh}: {orders: Order[], onRe
 
   }
 
-  function handleDelete(order_id: string){
+  function handleDelete(order_id: string) {
     try {
       deleteOrder(order_id);
       toast.success('Order deleted successfully');
@@ -41,7 +49,7 @@ export default function   OrderTable({orders, onRefresh}: {orders: Order[], onRe
   ];
 
   if (!orders || orders.length === 0) return <div>No orders found</div>;
-  
+
   return (
     <>
       <TableCrud<Order> data={orders} columns={columns} onSave={handleSave} onDelete={handleDelete} />

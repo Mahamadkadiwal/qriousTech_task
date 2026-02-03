@@ -13,22 +13,22 @@ import PageHeader from "../../_component/PageHeader";
 import { addOrder, getOrders, getProduct } from "../../_lib/localStorage";
 import toast from "react-hot-toast";
 
-export default function page() {
+export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
 
   const [orders, setOrders] = useState<Order[]>([]);
-  
-    const fetchOrders = useCallback(() => {
-      const orders =  getOrders() as Order[];
-      if(!orders) return;
-      setOrders(orders);
-    },[]);
-  
-    useEffect(() => {
-      
-      fetchOrders();
-    }, [fetchOrders]);
+
+  const fetchOrders = useCallback(() => {
+    const orders = getOrders() as Order[];
+    if (!orders) return;
+    setOrders(orders);
+  }, []);
+
+  useEffect(() => {
+
+    fetchOrders();
+  }, [fetchOrders]);
 
   useEffect(() => {
     const productData = getProduct();
@@ -36,7 +36,7 @@ export default function page() {
   }, []);
 
   const {
-    register, 
+    register,
     handleSubmit,
     reset,
     formState: { errors },
@@ -56,7 +56,7 @@ export default function page() {
 
   function onSubmit(data: OrderFormData) {
     try {
-      addOrder({...data, id: ""});
+      addOrder({ ...data, id: "" });
       toast.success("Order added successfully");
       reset();
       fetchOrders();
@@ -82,20 +82,11 @@ export default function page() {
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Add Order">
         <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <Input placeholder="Customer Name" 
-          {...register("customer_name")} 
-          id="customer_name"
-          error={errors.customer_name?.message}
+          <Input placeholder="Customer Name"
+            {...register("customer_name")}
+            id="customer_name"
+            error={errors.customer_name?.message}
           />
-
-          {/* <Input
-            id="product_name"
-            value={formData.product_name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setFormData({ ...formData, product_name: e.target.value })
-            }
-            placeholder="Product Name"
-          /> */}
 
           <div>
             <select
@@ -119,7 +110,7 @@ export default function page() {
           <Input id="amount"
             {...register("amount")}
             error={errors.amount?.message}
-             placeholder="Amount" />
+            placeholder="Amount" />
 
           <Input
             id="order_date"

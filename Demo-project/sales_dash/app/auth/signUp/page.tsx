@@ -12,44 +12,43 @@ export default function SignUp() {
   const router = useRouter();
 
   const {
-      register,
-      handleSubmit,
-      formState: { errors, isSubmitting },
-    } = useForm<RegisterFormInputs>({
-      resolver: zodResolver(registerSchema),
-      defaultValues: {
-        username: '',
-        email: '',
-        password: '',
-        role: 'user',
-      },
-    });
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormInputs>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      username: '',
+      email: '',
+      password: '',
+      role: 'user',
+    },
+  });
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
     try {
       saveUser(data);
       toast.success('User registered successfully!');
-      if(data.role === "admin"){
-         router.push("/dashboard");
-      } else{
+      if (data.role === "admin") {
+        router.push("/dashboard");
+      } else {
         router.push("/userHome");
       }
     } catch (error: unknown) {
-      if(error instanceof Error){
+      if (error instanceof Error) {
         toast.error(error.message);
         return;
-      } else{
+      } else {
         toast.error("An unknown error occurred");
         return;
       }
     }
-  }  
+  }
 
- 
+
 
   return (
-    <div className="min-h-screen  from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
-      
+    <div className="h-screen overflow-hidden from-gray-50 via-white to-gray-100 flex items-center justify-center p-4">
 
       <div className="relative w-full max-w-5xl">
         <div className="grid lg:grid-cols-2 gap-4 lg:gap-0">
@@ -60,25 +59,25 @@ export default function SignUp() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
                   <span className="text-sm font-semibold">Sales Dashboard</span>
                 </div>
-                
+
                 <h2 className="text-4xl font-bold leading-tight">
                   Welcome to the Future of Sales Management
                 </h2>
-                
+
                 <p className="text-lg text-white/90">
                   Join thousands of businesses streamlining their sales operations with our powerful platform.
                 </p>
               </div>
 
-              
 
-              
+
+
             </div>
           </div>
 
           <div className="bg-white rounded-2xl lg:rounded-l-none lg:rounded-r-2xl shadow-2xl p-8 md:p-12">
             <div className="space-y-8">
-              
+
               <div className="lg:hidden text-center space-y-2">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full border border-(--border-color)">
                   <span className="text-sm font-semibold text-(--font-color)">Sales Dashboard</span>
@@ -142,7 +141,7 @@ export default function SignUp() {
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                   </select>
-                  
+
                 </div>
 
                 <button
@@ -167,8 +166,8 @@ export default function SignUp() {
               <div className="text-center pt-6 border-t border-(--border-color)">
                 <p className="text-gray-600">
                   Already have an account?{" "}
-                  <Link 
-                    href="/auth/signIn" 
+                  <Link
+                    href="/auth/signIn"
                     className="text-(--primary-btn) font-semibold hover:text-(--secondary-btn) transition-colors"
                   >
                     Sign In

@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
 import { PermissionModule } from './permission/permission.module';
+import { TasknestModule } from './tasknest/tasknest.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { PermissionModule } from './permission/permission.module';
     DatabaseModule,
     RolesModule,
     PermissionModule,
+    TasknestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

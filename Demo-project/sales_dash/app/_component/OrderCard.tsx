@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
+import { OrderWithDetails } from "../_types/order";
 
-export default function OrderCard({ order }) {
+export default function OrderCard({ order }: { order: OrderWithDetails }) {
   const statusStyle = {
     Pending: "bg-yellow-100 text-yellow-700",
     Processing: "bg-blue-100 text-blue-700",
@@ -16,7 +17,7 @@ export default function OrderCard({ order }) {
       
       <div className="w-24 h-24 flex items-center justify-center">
         <Image
-          src={order.image}
+          src={order.image || "/default-image.png"}
           alt={order.product_name}
           width={100}
           height={100}

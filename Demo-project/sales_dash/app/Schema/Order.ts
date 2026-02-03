@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 export const StatusEnum = z.enum([
@@ -15,10 +14,10 @@ export const orderSchema = z.object({
   id: z.string().optional(),
   customer_name: z.string().min(1, "Customer name is required"),
   product_name: z.string().min(1, "Product is required"),
-  amount: z.string().min(1, "Amount is required"),
+  amount: z.preprocess((val) => Number(val), z.number().min(1)),
   order_date: z.string().min(1, "Order date is required"),
   status: StatusEnum,
-  isNew: z.boolean(),
+  isNew: z.boolean().optional(),
 });
 
 export type OrderFormData = z.infer<typeof orderSchema>;
