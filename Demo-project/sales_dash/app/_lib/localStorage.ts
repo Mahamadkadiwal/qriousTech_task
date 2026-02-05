@@ -25,52 +25,66 @@ export function getCurrentAdmin(): Users | null {
 }
 
 export function saveUser(data: Users): void {
-  const users = getUsers();
-  if (users.find((user) => user.email === data.email)) {
-    throw new Error("User with this email already exists");
-  }
+  // const users = getUsers();
+  // if (users.find((user) => user.email === data.email)) {
+  //   throw new Error("User with this email already exists");
+  // }
 
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(data.password, salt);
+  // const salt = bcrypt.genSaltSync(10);
+  // const hash = bcrypt.hashSync(data.password, salt);
 
-  const newData = {
-    ...data,
-    password: hash,
+  // const newData = {
+  //   ...data,
+  //   password: hash,
+  // };
+
+  const localUser = {
+    userId: data.userId,
+    username: data.username,
+    email: data.email,
+    role: data.role,
   };
+
   if (data.role === "admin") {
-    localStorage.setItem("currentAdmin", JSON.stringify(newData));
+    localStorage.setItem("currentAdmin", JSON.stringify(localUser));
   } else if (data.role === "user") {
-    localStorage.setItem("currentUser", JSON.stringify(newData));
+    localStorage.setItem("currentUser", JSON.stringify(localUser));
   }
-  users.push(newData);
-  localStorage.setItem("users", JSON.stringify(users));
+  // users.push(newData);
+  // localStorage.setItem("users", JSON.stringify(users));
 }
 
 export function authenticateUser(
-  data: Pick<Users, "email" | "password" | "role">,
+  data: Pick<Users, "email" | "password" | "role" | "username" | "userId">,
 ) {
-  const users = getUsers();
+  // const users = getUsers();
 
-  const user = users.find((user) => user.email === data.email);
-  if (!user) {
-    throw new Error("Invalid email or password");
-  }
+  // const user = users.find((user) => user.email === data.email);
+  // if (!user) {
+  //   throw new Error("Invalid email or password");
+  // }
 
-  const isMatch = bcrypt.compareSync(data.password, user.password);
-  if (!isMatch) {
-    throw new Error("Invalid email or password");
-  }
+  // const isMatch = bcrypt.compareSync(data.password, user.password);
+  // if (!isMatch) {
+  //   throw new Error("Invalid email or password");
+  // }
 
-  if (user.role !== data.role) {
-    throw new Error("User role mismatch");
-  }
+  // if (user.role !== data.role) {
+  //   throw new Error("User role mismatch");
+  // }
 
-  if (user.role === "admin") {
-    localStorage.setItem("currentAdmin", JSON.stringify(user));
-  } else if (user.role === "user") {
-    localStorage.setItem("currentUser", JSON.stringify(user));
+  const localUser = {
+    userId: data.userId,
+    username: data.username,
+    email: data.email,
+    role: data.role,
+  };
+
+  if (data.role === "admin") {
+    localStorage.setItem("currentAdmin", JSON.stringify(localUser));
+  } else if (data.role === "user") {
+    localStorage.setItem("currentUser", JSON.stringify(localUser));
   }
-  return user;
 }
 
 export function updateAllUsers(userData: Users, updatedUser: Users) {
@@ -160,6 +174,16 @@ export function editCart(id: string, data: Partial<Cart>): void {
 export function cartDelete(id: string): void {
   const carts = getCart().filter((cart) => cart.id !== id);
   localStorage.setItem("carts", JSON.stringify(carts));
+}
+
+export function updateCartQuantity(id: string, qty: number) {
+  const carts = getCart() || [];
+
+  const updated = carts.map((cart) =>
+    cart.id === id ? { ...cart, quantity: qty } : cart,
+  );
+
+  localStorage.setItem("carts", JSON.stringify(updated));
 }
 
 export function clearCart(): void {

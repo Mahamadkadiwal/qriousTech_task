@@ -1,4 +1,5 @@
 "use client";
+import { createUser } from "@/app/actions/user.action";
 import { RegisterFormInputs, registerSchema } from "@/app/Schema/SignUp";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -6,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from 'react-hot-toast';
 import Input from "../../_component/Input";
-import { saveUser } from "../../_lib/localStorage";
+import { authenticateUser } from "../../_lib/localStorage";
 
 export default function SignUp() {
   const router = useRouter();
@@ -25,9 +26,12 @@ export default function SignUp() {
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     try {
-      saveUser(data);
+      const user = await createUser(data);
+      authenticateUser(user);
+      console.log(user);
+      // return;
       toast.success('User registered successfully!');
       if (data.role === "admin") {
         router.push("/dashboard");

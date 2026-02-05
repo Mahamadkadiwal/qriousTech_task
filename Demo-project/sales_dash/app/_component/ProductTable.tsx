@@ -1,16 +1,16 @@
 import toast from 'react-hot-toast';
-import { deleteProduct, editProduct } from '../_lib/localStorage';
+import { productSchema } from '../Schema/Product';
 import { Product } from '../_types/Product';
 import { Column } from '../_types/tablecrud';
+import { deleteProduct, updateProduct } from '../actions/product.action';
 import TableCrud from './TableCrud';
-import { productSchema } from '../Schema/Product';
 
 export default function ProductTable({ products, onRefresh }: { products?: Product[], onRefresh?: () => void }) {
 
 
   if (!products) return <div>Loading...</div>;
 
-  function handleSave(id: string, updatedRow: Product) {
+  async function handleSave(id: string, updatedRow: Product) {
     try {
       const parsed = productSchema.safeParse(updatedRow);
       if (!parsed.success) {
@@ -19,7 +19,7 @@ export default function ProductTable({ products, onRefresh }: { products?: Produ
         return;
       }
 
-      editProduct(id, updatedRow);
+      await updateProduct(id, updatedRow);
       onRefresh && onRefresh();
       toast.success('Product updated successfully');
     } catch (err) {
@@ -28,9 +28,10 @@ export default function ProductTable({ products, onRefresh }: { products?: Produ
     }
   }
 
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     try {
-      deleteProduct(id);
+      // deleteProduct(id);
+      await deleteProduct(id);
       // fetchProducts();
       onRefresh && onRefresh();
       toast.success('Product deleted successfully');

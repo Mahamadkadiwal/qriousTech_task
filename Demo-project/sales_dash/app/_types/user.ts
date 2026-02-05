@@ -3,8 +3,9 @@ export interface User {
   role: "user" | "admin";
 }
 
-export interface Users{
+export interface Users {
   id?: string;
+  userId?: string;
   username: string;
   email: string;
   password: string;

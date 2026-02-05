@@ -23,6 +23,7 @@ export default function Page() {
       customer_name: user ? user.username : "Guest",
       product_name: product.name,
       amount: product.price,
+      quantity: 1,
     };
     try {
       addCart(data);

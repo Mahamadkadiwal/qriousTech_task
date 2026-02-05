@@ -12,6 +12,7 @@ export default function TableCrud<T extends BaseRow>({ data, columns, showAction
     const [editingRow, setEditingRow] = useState<T["id"] | null>(null);
     const [editData, setEditData] = useState<Partial<T>>({});
 
+
     const [confirmDeleteId, setConfirmDeleteId] = useState<T["id"] | null>(null);
 
     const tableColumns: Column<T>[] = [
@@ -51,7 +52,7 @@ export default function TableCrud<T extends BaseRow>({ data, columns, showAction
         if (row.isNew === false) return;
         const updatedRow = { ...row, isNew: false };
 
-        onSave(row.id, updatedRow);
+        //onSave(row.id, updatedRow);
     }
 
     function deleteRow(id: T["id"]) {
@@ -206,8 +207,16 @@ export default function TableCrud<T extends BaseRow>({ data, columns, showAction
             return (
                 <input
                     className="border px-2 py-1 rounded w-30"
+                    type={key === "price" ? "number" : "text"}
                     value={String(value)}
-                    onChange={(e) => updateField(key as keyof T, e.target.value as T[keyof T])}
+                    onChange={(e) => {
+                        const val =
+                            key === "price"
+                                ? Number(e.target.value)
+                                : e.target.value;
+
+                        updateField(key as keyof T, val as T[keyof T]);
+                    }}
                 />
             )
         }

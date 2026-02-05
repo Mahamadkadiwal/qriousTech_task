@@ -9,6 +9,7 @@ import { CommonModule } from './common/common.module';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
     CommonModule,
     ProductModule,
     OrderModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

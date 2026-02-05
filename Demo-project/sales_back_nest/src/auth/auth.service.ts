@@ -9,6 +9,8 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/loginUser.dto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { ForgotPasswordDto } from './dto/forgotPassword.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,6 +35,7 @@ export class AuthService {
     return {
       access_token: token,
       userId: user._id,
+      email: user.email,
       username: user.username,
       role: user.role,
     };
@@ -61,12 +64,13 @@ export class AuthService {
       access_token: token,
       userId: user._id,
       username: user.username,
+      email: user.email,
       role: user.role,
     };
   }
 
-  async forgotPassword(email: string) {
-    const user = await this.userService.findByEmail(email);
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto) {
+    const user = await this.userService.findByEmail(forgotPasswordDto.email);
 
     if (!user) {
       throw new NotFoundException('Email not found');
@@ -75,9 +79,9 @@ export class AuthService {
     try {
       const token = await this.jwtService.signAsync({ userid: user._id });
 
-      const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+      const resetLink = `http://localhost:3000/auth/reset-password?token=${token}`;
       await this.mailService.sendMail({
-        to: email,
+        to: forgotPasswordDto.email,
         subject: 'Password Reset Request',
         html: `
                 <h3>Dear User,</h3>
@@ -99,17 +103,18 @@ export class AuthService {
     };
   }
 
-  async resetPassword(token: string, newPassword: string) {
-    console.log(newPassword);
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
     try {
-      const decode = await this.jwtService.verify(token);
+      const decode = await this.jwtService.verify(resetPasswordDto.token);
 
       const user = await this.userService.findUserbyId(decode?.userid);
       if (!user) {
         throw new UnauthorizedException('User not exits');
       }
 
-      const hashedPassword = await this.hashService.hashPassword(newPassword);
+      const hashedPassword = await this.hashService.hashPassword(
+        resetPasswordDto.newPassword,
+      );
 
       const updatedUser = await this.userService.updateUserPassword(
         decode.userid,
@@ -123,11 +128,16 @@ export class AuthService {
       return {
         success: true,
         message: 'Password update successfully',
-        user: updatedUser,
+        user: {
+          userId: updatedUser._id,
+          username: updatedUser.username,
+          email: updatedUser.email,
+          role: updatedUser.role,
+        },
       };
     } catch (error) {
       console.log(error);
-      throw new UnauthorizedException('problem in rest password');
+      throw new UnauthorizedException('problem in reset password');
     }
   }
 }

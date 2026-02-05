@@ -23,7 +23,13 @@ export class ProductService {
   }
 
   async findAll() {
-    return await this.productModel.find().select('-__v');
+    const products = await this.productModel.find().select('-__v').lean();
+
+    return products.map((p) => ({
+      ...p,
+      id: p._id,
+      _id: undefined,
+    }));
   }
 
   async findOne(id: string) {

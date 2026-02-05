@@ -4,7 +4,7 @@ import OrderSummary from "@/app/_component/OrderSummary";
 import { CartWithDetails } from "@/app/_types/cart";
 import { User } from "@/app/_types/user";
 import { useEffect, useState } from "react";
-import { cartDelete, getCart, getCurrentUser, getProduct } from "../../_lib/localStorage";
+import { cartDelete, getCart, getCurrentUser, getProduct, updateCartQuantity } from "../../_lib/localStorage";
 
 
 export default function Page() {
@@ -44,6 +44,13 @@ export default function Page() {
         cartDelete(id);
         fetchCart();
     };
+
+    const handleQuantityChange = (id: string, qty: number) => {
+        if (qty < 1) return;
+        updateCartQuantity(id, qty);
+        fetchCart();
+    };
+
     return (
         <div className="min-h-full pt-2 pb-10 px-4 mx-30">
             <h2 className="text-2xl font-semibold text-(--font-color) mb-4">
@@ -58,7 +65,7 @@ export default function Page() {
 
                 <div className="lg:col-span-2 flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-2">
                     {carts.map(cart => (
-                        <CartCard key={cart.id} cart={cart} onDelete={handleDelete} />
+                        <CartCard key={cart.id} cart={cart} onDelete={handleDelete} onQuantityChange={handleQuantityChange} />
                     ))}
                 </div>
 

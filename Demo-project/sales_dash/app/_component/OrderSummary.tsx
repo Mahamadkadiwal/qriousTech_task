@@ -7,7 +7,7 @@ import PaymentForm from "./Payment";
 export default function OrderSummary({ carts }: { carts: Cart[] }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const totalAmount = useMemo(
-        () => carts.reduce((total, cart) => total + Number(cart.amount), 0),
+        () => carts.reduce((total, cart) => total + Number(+cart.amount * cart.quantity), 0),
         [carts]
     );
 
