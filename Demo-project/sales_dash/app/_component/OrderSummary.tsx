@@ -12,7 +12,7 @@ export default function OrderSummary({ carts }: { carts: Cart[] }) {
     );
 
     return (
-        <div className="sticky top-6 p-6 bg-white border border-gray-200 rounded-2xl shadow-md space-y-6">
+        <div className="lg:sticky lg:top-6 p-6 bg-white border border-gray-200 rounded-2xl shadow-md space-y-6">
 
             <h3 className="text-xl font-bold text-(--font-color)">
                 Order Summary

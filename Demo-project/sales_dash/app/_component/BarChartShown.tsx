@@ -1,44 +1,32 @@
 import { useEffect, useState } from "react";
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
+  BarChart,
   CartesianGrid,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
-import { getOrders } from "../_lib/localStorage";
+import { api } from "../_lib/api";
 
 type BarData = {
   name: string;
   orders: number;
 };
 
-type Order = {
-  product_name: string;
-};
 
 export default function BarChartShown() {
   const [data, setData] = useState<BarData[] | null>(null);
 
   useEffect(() => {
-    const orders = (getOrders() as Order[]) || [];
+    async function loadProduct() {
+      const res = await api('/dashboard/productCount');
+      setData(res);
+    }
 
-    const productCount: Record<string, number> = {};
-
-    orders.forEach((order) => {
-      const product = order.product_name || "Unknown";
-      productCount[product] = (productCount[product] || 0) + 1;
-    });
-
-    const barData = Object.entries(productCount)
-      .map(([name, orders]) => ({ name, orders }))
-      .sort((a, b) => b.orders - a.orders)
-      .slice(0, 5);
-
-    setData(barData);
+    loadProduct();
   }, []);
 
   return (

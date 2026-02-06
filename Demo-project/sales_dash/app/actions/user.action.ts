@@ -57,3 +57,16 @@ export async function resetPassword(data: {
     body: JSON.stringify(data),
   });
 }
+
+export async function profileUpdate(
+  id: string,
+  data: {
+    username: string;
+    email: string;
+  },
+) {
+  return api(`/auth/profile/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}

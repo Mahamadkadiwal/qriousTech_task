@@ -1,18 +1,24 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { addCart, getCurrentUser, getProduct } from "../_lib/localStorage";
+import { api } from "../_lib/api";
+import { addCart, getCurrentUser } from "../_lib/localStorage";
 import { Product } from "../_types/Product";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const stored = getProduct() as Product[];
-    setProducts(stored);
+  const fetchProducts = useCallback(async () => {
+    const products1 = await api('/product');
+    setProducts(products1);
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+
+  }, [fetchProducts]);
 
   function addToCart(product: Product) {
     const user = getCurrentUser();
@@ -21,9 +27,11 @@ export default function Page() {
     const data = {
       id: "",
       customer_name: user ? user.username : "Guest",
+      userId: user ? user.userId : "Guest",
       product_name: product.name,
       amount: product.price,
       quantity: 1,
+      productId: product.id
     };
     try {
       addCart(data);
@@ -38,7 +46,7 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-full pt-2 pb-10 px-4 mx-30">
+    <div className="min-h-full pt-4 pb-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       <h2 className="text-2xl font-semibold text-(--font-color) mb-4">
         Available Products
       </h2>
@@ -51,18 +59,19 @@ export default function Page() {
         {products.map((product) => (
           <div
             key={product.id}
-            className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition p-4 flex items-center gap-4"
+            className="bg-white rounded-xl border border-gray-200
+            shadow-sm hover:shadow-lg transition p-4 flex flex-col sm:flex-row gap-4"
           >
-            <div className="w-28 h-28 flex items-center justify-center">
+            <div className="w-full sm:w-28 h-40 sm:h-28 relative flex justify-center items-center">
               <Image
                 src={product.image}
                 alt={product.name}
                 width={100}
                 height={100}
-                className="h-full object-contain"
+                className="object-contain rounded"
               />
             </div>
-            <div className="flex flex-col flex-1">
+            <div className="flex flex-col flex-1 gap-1">
               <h3 className="text-lg font-semibold text-gray-800">
                 {product.name}
               </h3>
@@ -74,7 +83,7 @@ export default function Page() {
               </p>
 
               <button type="button" onClick={() => addToCart(product)}
-                className="mt-2 primary-btn w-fit transition">
+                className="mt-2 primary-btn w-full sm:w-fit">
                 {loading ? 'Adding...' : 'Add to cart'}
               </button>
             </div>

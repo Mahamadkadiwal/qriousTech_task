@@ -11,6 +11,7 @@ import { LoginUserDto } from './dto/loginUser.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { ProfileUpdateDto } from './dto/profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -139,5 +140,10 @@ export class AuthService {
       console.log(error);
       throw new UnauthorizedException('problem in reset password');
     }
+  }
+
+  async profileUpdate(userId: string, profileDto: ProfileUpdateDto) {
+    const user = await this.userService.profileUpdate(userId, profileDto);
+    return user;
   }
 }

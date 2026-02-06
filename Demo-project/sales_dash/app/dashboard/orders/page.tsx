@@ -1,26 +1,27 @@
 "use client";
 
-import { Order } from "@/app/_types/order";
+import { api } from "@/app/_lib/api";
+import { OrderWithDetails } from "@/app/_types/order";
 import { Product } from "@/app/_types/Product";
 import { OrderFormData, orderSchema } from "@/app/Schema/Order";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import Input from "../../_component/Input";
 import Modal from "../../_component/Modal";
 import OrderTable from "../../_component/OrderTable";
 import PageHeader from "../../_component/PageHeader";
-import { addOrder, getOrders, getProduct } from "../../_lib/localStorage";
-import toast from "react-hot-toast";
+import { addOrder, getProduct } from "../../_lib/localStorage";
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
 
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderWithDetails[]>([]);
 
-  const fetchOrders = useCallback(() => {
-    const orders = getOrders() as Order[];
+  const fetchOrders = useCallback(async () => {
+    const orders = await api(`/order`);
     if (!orders) return;
     setOrders(orders);
   }, []);
@@ -56,7 +57,7 @@ export default function Page() {
 
   function onSubmit(data: OrderFormData) {
     try {
-      addOrder({ ...data, id: "" });
+      addOrder({ data });
       toast.success("Order added successfully");
       reset();
       fetchOrders();
@@ -107,16 +108,16 @@ export default function Page() {
             )}
           </div>
 
-          <Input id="amount"
-            {...register("amount")}
-            error={errors.amount?.message}
+          <Input type="number" id="amount"
+            {...register("totalAmount")}
+            error={errors.totalAmount?.message}
             placeholder="Amount" />
 
           <Input
             id="order_date"
             type="date"
-            {...register("order_date")}
-            error={errors.order_date?.message}
+            {...register("orderDate")}
+            error={errors.orderDate?.message}
             className=" text-(--font-color)"
             placeholder="Order Date"
           />

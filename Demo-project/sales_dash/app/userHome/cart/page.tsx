@@ -52,7 +52,7 @@ export default function Page() {
     };
 
     return (
-        <div className="min-h-full pt-2 pb-10 px-4 mx-30">
+        <div className="min-h-full pt-4 pb-10 px-4 max-w-6xl mx-auto">
             <h2 className="text-2xl font-semibold text-(--font-color) mb-4">
                 My Cart
             </h2>
@@ -61,7 +61,7 @@ export default function Page() {
                 <p className="text-gray-500">No products added in cart yet.</p>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <div className="lg:col-span-2 flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-2">
                     {carts.map(cart => (

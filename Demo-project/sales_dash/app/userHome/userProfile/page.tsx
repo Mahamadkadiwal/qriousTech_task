@@ -1,80 +1,79 @@
 "use client";
 import UserProfileCard from "@/app/_component/UserProfileCard";
 import UserProfileForm from "@/app/_component/UserProfileForm";
-import { getCurrentUser, updateAllUsers } from "@/app/_lib/localStorage";
+import { getCurrentUser } from "@/app/_lib/localStorage";
+import { ProfileFormData, profileSchema } from "@/app/_types/profile";
+import { profileUpdate } from "@/app/actions/user.action";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PageHeader from "../../_component/PageHeader";
 
 export default function Page() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
   });
 
   useEffect(() => {
     const currentUser = localStorage.getItem("currentUser");
     if (currentUser) {
       const userData = JSON.parse(currentUser);
-      setFormData({
-        username: userData.username || "",
-        email: userData.email || "",
+      reset({
+        username: userData.username,
+        email: userData.email,
       });
     } else {
       router.push("/auth/signIn");
     }
-  }, []);
-
-  const handleChange = (
-    field: "username" | "email",
-    value: string
-  ) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  }, [reset]);
 
   const handleCancel = () => {
     const user = JSON.parse(localStorage.getItem("currentUser") || "{}");
-    setFormData({
-      username: user.username ?? "",
-      email: user.email ?? "",
+    if (!user) return;
+
+    reset({
+      username: user.username,
+      email: user.email,
     });
+
     toast.success("Changes discarded");
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: ProfileFormData) => {
     setIsSubmitting(true);
-
     try {
-      const userData = getCurrentUser();
-      if (!userData) {
-        throw new Error("No user session found");
-      }
+      const user = getCurrentUser();
+      if (!user) throw new Error("No admin session");
 
-      const updatedUser = {
-        ...userData,
-        username: formData.username,
-        email: formData.email,
-      };
+      await profileUpdate(user.userId as string, data);
 
-      // update the localstorage current user
-      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({ ...user, ...data })
+      );
 
-      // update in all users
-      updateAllUsers(userData, updatedUser);
-
-      toast.success("Settings updated successfully!");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update settings");
+      toast.success("Profile updated successfully");
+    } catch {
+      toast.error("Failed to update profile");
     } finally {
       setIsSubmitting(false);
     }
   };
 
+
+  const username = watch("username");
+  const email = watch("email");
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
@@ -82,16 +81,16 @@ export default function Page() {
         <PageHeader title="Account Settings" />
 
         <div className="mt-6 grid md:grid-cols-3 gap-6">
-          
+
           <div className="md:col-span-1 space-y-6">
-            
+
             <UserProfileCard
-              username={formData.username}
-              email={formData.email}
+              username={username}
+              email={email}
               role="user"
             />
 
-            
+
           </div>
 
           <div className="md:col-span-2">
@@ -106,15 +105,15 @@ export default function Page() {
               </div>
 
               <UserProfileForm
-                formData={formData}
+                register={register}
+                errors={errors}
                 isSubmitting={isSubmitting}
-                onChange={handleChange}
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 onCancel={handleCancel}
               />
             </div>
 
-            
+
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PaymentModule } from './payment/payment.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { PaymentModule } from './payment/payment.module';
     ProductModule,
     OrderModule,
     PaymentModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

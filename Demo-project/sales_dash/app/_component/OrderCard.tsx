@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { OrderWithDetails } from "../_types/order";
+import { formatDate } from "../utils/formatDate";
 
 export default function OrderCard({ order }: { order: OrderWithDetails }) {
   const statusStyle = {
@@ -12,37 +13,70 @@ export default function OrderCard({ order }: { order: OrderWithDetails }) {
   };
 
   return (
-    <div className="flex justify-between items-center rounded-xl p-4 gap-4 bg-white border border-gray-200 shadow-sm hover:shadow-lg transition">
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition p-4 space-y-4">
 
-      
-      <div className="w-24 h-24 flex items-center justify-center">
-        <Image
-          src={order.image || "/default-image.png"}
-          alt={order.product_name}
-          width={100}
-          height={100}
-          className="object-cover rounded"
-        />
+      <div className="space-y-4">
+        {order.items.map((item, index) => (
+          <div
+            key={index}
+            className="
+              flex flex-col sm:flex-row
+              gap-3 sm:gap-4
+              border-b border-gray-400 pb-3 last:border-none last:pb-0
+            "
+          >
+            <div className="
+             w-full sm:w-24 h-40 sm:h-24 relative flex items-center justify-center
+            ">
+              <Image
+                src={item.productId?.image || "/default-image.png"}
+                alt={item.name}
+                width={100}
+                height={100}
+                className="object-cover rounded"
+              />
+            </div>
+
+            <div className="flex flex-col flex-1">
+              <h3 className="text-base sm:text-lg font-semibold text-(--font-color)">
+                {item.name}
+              </h3>
+
+              <p className="text-sm text-gray-500 line-clamp-2">
+                {item.productId?.description}
+              </p>
+
+              <p className="text-sm font-medium text-green-600 mt-1">
+                ₹ {item.price} × {item.quantity}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      <div className="flex flex-col flex-1">
-        <h3 className="text-lg font-semibold text-(--font-color)">
-          {order.product_name}
-        </h3>
-        <p className="text-gray-500 text-sm">
-          {order.description}
-        </p>
-        <p className="text-lg font-bold text-green-600 mt-1">
-          ₹ {order.amount}
-        </p>
-        <p className="text-gray-500 font-semibold">
-          Ordered on: {order.order_date}
-        </p>
-      </div>
+      <div className="
+        flex flex-col sm:flex-row
+        sm:justify-between sm:items-center
+        gap-3 border-t border-gray-400 pt-3
+      ">
 
-      <div>
+        <div className="text-sm text-(--font-color) space-y-1">
+          <p>
+            <span className="font-semibold">Total:</span> ₹ {order.totalAmount}
+          </p>
+          <p>
+            <span className="font-semibold">Ordered:</span>{" "}
+            {formatDate(order.orderDate)}
+          </p>
+        </div>
+
         <span
-          className={`px-4 py-2 rounded-full text-sm font-medium ${statusStyle[order.status]}`}
+          className={`
+            px-3 py-1 rounded-full
+            text-xs sm:text-sm
+            font-semibold w-fit
+            ${statusStyle[order.status]}
+          `}
         >
           {order.status}
         </span>

@@ -5,4 +5,5 @@ export interface Product {
   image: string;
   price: number;
   isNew?: boolean;
+  productId?: string;
 }

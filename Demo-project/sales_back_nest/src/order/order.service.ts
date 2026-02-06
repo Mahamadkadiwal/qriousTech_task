@@ -30,12 +30,18 @@ export class OrderService {
     });
   }
 
-  findAll() {
-    return this.orderModel
+  async findAll() {
+    const orders = await this.orderModel
       .find()
       .populate('userId', 'username email')
       .sort({ createAt: -1 })
-      .exec();
+      .lean();
+
+    return orders.map((o) => ({
+      ...o,
+      id: o._id,
+      _id: undefined,
+    }));
   }
 
   async findOne(id: string) {
@@ -52,6 +58,25 @@ export class OrderService {
     }
 
     return order;
+  }
+
+  async getOrderByUserId(id: string) {
+    if (!isValidObjectId(id)) {
+      throw new BadRequestException('Invalid User ID');
+    }
+    const orders = await this.orderModel
+      .find({
+        userId: id,
+      })
+      .populate('items.productId', 'image description')
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return orders.map((o) => ({
+      ...o,
+      id: o._id,
+      _id: undefined,
+    }));
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {

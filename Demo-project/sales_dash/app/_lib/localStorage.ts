@@ -145,13 +145,16 @@ export function getCart(): Cart[] {
 
 export function addCart(data: Cart): void {
   const carts = getCart();
-  const existingCart = carts.find(
+  const existingCart = carts.findIndex(
     (cart) =>
       cart.product_name === data.product_name &&
       cart.customer_name === data.customer_name,
   );
-  if (existingCart) {
-    throw new Error("Product already in cart");
+  if (existingCart !== -1) {
+    carts[existingCart].quantity =
+      (carts[existingCart].quantity || 1) + data.quantity;
+    localStorage.setItem("carts", JSON.stringify(carts));
+    return;
   }
   const id = String(carts.length + 1);
   data.id = id;
@@ -186,8 +189,11 @@ export function updateCartQuantity(id: string, qty: number) {
   localStorage.setItem("carts", JSON.stringify(updated));
 }
 
-export function clearCart(): void {
-  localStorage.removeItem("carts");
+export function clearCart(id: string): void {
+  const carts = getCart() || [];
+
+  const updated = carts.filter(cart => cart.userId !== id);
+  localStorage.setItem("carts", JSON.stringify(updated));
 }
 
 // add payment

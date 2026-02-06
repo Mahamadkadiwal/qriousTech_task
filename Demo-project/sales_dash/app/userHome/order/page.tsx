@@ -1,53 +1,39 @@
 "use client";
+import { api } from "@/app/_lib/api";
+import { Order } from "@/app/_types/order";
+import { User, Users } from "@/app/_types/user";
 import { useEffect, useState } from "react";
 import OrderCard from "../../_component/OrderCard";
-import { getCurrentUser, getOrders, getProduct } from "../../_lib/localStorage";
-import { Order } from "@/app/_types/order";
-import { User } from "@/app/_types/user";
+import { getCurrentUser, getProduct } from "../../_lib/localStorage";
 
 
 export default function Page() {
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [orders, setOrders] = useState<(Order & {
-      image?: string;
-      description?: string;
-    })[]>([]);
-    
-    useEffect(() => {
-        const userData = getCurrentUser() as User | null;
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<(Order & {
+    image?: string;
+    description?: string;
+  })[]>([]);
 
-        if(userData && userData.role === "user"){
-            setCurrentUser(userData);
+  const fetchOrder = async () => {
+    const userData = getCurrentUser() as Users | null;
 
-            const allOrders = getOrders() || [];
-            const allProducts = getProduct() || [];
+    if (userData && userData.role === "user") {
+      // setCurrentUser(userData);
 
-            const userOrders = allOrders.filter(order => order.customer_name === userData.username);
+      const allOrders = await api(`/order/user/${userData.userId}`);
+      console.log(allOrders);
+      setOrders(allOrders);
+    }
+  }
 
-            const productwithOrder = userOrders.map(order => {
-                const product = allProducts.find(
-                    p => p.name === order.product_name
-                );
+  useEffect(() => {
 
-                return {
-                    ...order,
-                    image: product?.image || "",
-                    description: product?.description || "",
-                };
-                });
-
-               
-            setOrders(productwithOrder);
-
-            
-           
-        }
-        
-    },[]);
+    fetchOrder();
+  }, []);
 
 
   return (
-    <div className="min-h-full pt-2 pb-10 px-4 mx-30">
+    <div className="min-h-full pt-4 pb-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       <h2 className="text-2xl font-semibold text-(--font-color) mb-4">
         My Orders
       </h2>

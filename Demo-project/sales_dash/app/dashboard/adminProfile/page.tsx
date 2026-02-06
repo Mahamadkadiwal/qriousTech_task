@@ -1,65 +1,50 @@
 "use client";
 import UserProfileCard from "@/app/_component/UserProfileCard";
 import UserProfileForm from "@/app/_component/UserProfileForm";
-import { getCurrentAdmin, updateAllUsers } from "@/app/_lib/localStorage";
-import { useCallback, useEffect, useState } from "react";
+import { getCurrentAdmin } from "@/app/_lib/localStorage";
+import { ProfileFormData, profileSchema } from "@/app/_types/profile";
+import { profileUpdate } from "@/app/actions/user.action";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import PageHeader from "../../_component/PageHeader";
 
 export default function Page() {
-   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
   });
 
-  // Load admin ONCE
   useEffect(() => {
     const admin = getCurrentAdmin();
     if (!admin) return;
 
-    setFormData({
-      username: admin.username ?? "",
-      email: admin.email ?? "",
+    reset({
+      username: admin.username,
+      email: admin.email,
     });
-  }, []);
+  }, [reset]);
 
-  const handleChange = useCallback(
-    (field: "username" | "email", value: string) => {
-      setFormData(prev => ({ ...prev, [field]: value }));
-    },
-    []
-  );
-
-  const handleCancel = () => {
-    const admin = getCurrentAdmin();
-    if (!admin) return;
-
-    setFormData({
-      username: admin.username ?? "",
-      email: admin.email ?? "",
-    });
-
-    toast.success("Changes discarded");
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: ProfileFormData) => {
     setIsSubmitting(true);
-
     try {
       const admin = getCurrentAdmin();
       if (!admin) throw new Error("No admin session");
 
-      const updatedAdmin = {
-        ...admin,
-        username: formData.username,
-        email: formData.email,
-      };
+      await profileUpdate(admin.userId as string, data);
 
-      localStorage.setItem("currentAdmin", JSON.stringify(updatedAdmin));
-      updateAllUsers(admin, updatedAdmin);
+      localStorage.setItem(
+        "currentAdmin",
+        JSON.stringify({ ...admin, ...data })
+      );
 
       toast.success("Profile updated successfully");
     } catch {
@@ -69,7 +54,20 @@ export default function Page() {
     }
   };
 
-  
+  const handleCancel = () => {
+    const admin = getCurrentAdmin();
+    if (!admin) return;
+
+    reset({
+      username: admin.username,
+      email: admin.email,
+    });
+
+    toast.success("Changes discarded");
+  };
+
+  const username = watch("username");
+  const email = watch("email");
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
@@ -77,16 +75,16 @@ export default function Page() {
         <PageHeader title="Account Settings" />
 
         <div className="mt-6 grid md:grid-cols-3 gap-6">
-         
+
           <div className="md:col-span-1 space-y-6">
-            
+
             <UserProfileCard
-              username={formData.username}
-              email={formData.email}
+              username={username}
+              email={email}
               role="admin"
             />
 
-            
+
           </div>
 
           <div className="md:col-span-2">
@@ -101,15 +99,15 @@ export default function Page() {
               </div>
 
               <UserProfileForm
-                formData={formData}
+                register={register}
+                errors={errors}
                 isSubmitting={isSubmitting}
-                onChange={handleChange}
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 onCancel={handleCancel}
               />
             </div>
 
-            
+
           </div>
         </div>
       </div>

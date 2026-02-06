@@ -2,6 +2,7 @@ export type Payment = {
   id?: string;
   orderIds: string[];
   cardHolder: string;
-  last4: string;
+  cardNumber: string;
   amount: number;
+  userId?: string;
 };

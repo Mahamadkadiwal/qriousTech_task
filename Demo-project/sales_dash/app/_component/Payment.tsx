@@ -1,14 +1,15 @@
 "use client";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Input from "./Input";
-import { PaymentFormData, paymentSchema } from "../Schema/payment";
-import { Cart } from "../_types/cart";
-import { addOrder, addPayment, clearCart, getOrders } from "../_lib/localStorage";
-import { Status } from "../Schema/Order";
-import { Payment } from "../_types/payment";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { PaymentFormData, paymentSchema } from "../Schema/payment";
+import { clearCart } from "../_lib/localStorage";
+import { Cart } from "../_types/cart";
+import { Payment } from "../_types/payment";
+import { createOrder } from "../actions/order.action";
+import { createPayment } from "../actions/payment.action";
+import Input from "./Input";
 
 export default function PaymentForm({
     carts,
@@ -30,37 +31,35 @@ export default function PaymentForm({
 
     const onSubmit = async (formData: PaymentFormData) => {
         try {
-            const createdOrderIds: string[] = [];
-
-            carts.forEach(cart => {
-                const orderData = {
-                    id: "",
-                    customer_name: cart.customer_name,
-                    product_name: cart.product_name,
-                    amount: cart.amount,
-                    order_date: new Date().toISOString().split("T")[0],
-                    status: "Pending" as Status,
-                    isNew: true,
-                };
-
-                const newOrder = addOrder(orderData);
-                createdOrderIds.push(newOrder.id);
-            });
-
+            const orderAdd = {
+                userId: carts[0].userId,
+                items: carts.map(cart => ({
+                    productId: cart.productId,
+                    name: cart.product_name,
+                    price: Number(cart.amount),
+                    quantity: cart.quantity,
+                }))
+            };
+            const newOrder = await createOrder(orderAdd);
             const payment: Payment = {
                 id: "",
-                orderIds: createdOrderIds,
+                userId: carts[0].userId,
+                orderIds: [newOrder._id],
                 cardHolder: formData.cardHolder,
-                last4: formData.cardNumber.slice(-4),
+                cardNumber: formData.cardNumber,
                 amount: totalAmount,
             };
 
-            addPayment(payment);
-            clearCart();
+            const res = await createPayment(payment);
+            if (res) {
+                if (carts[0].userId) {
+                    clearCart(carts[0].userId);
+                }
+                toast.success("Order placed successfully!");
+                router.push("/userHome/order");
+                onClose();
+            }
 
-            toast.success("Order placed successfully!");
-            router.push("/userHome/order");
-            onClose();
         } catch (err) {
             if (err instanceof Error) {
                 toast.error(`Error: ${err.message}`);

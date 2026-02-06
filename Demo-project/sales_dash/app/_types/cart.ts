@@ -4,6 +4,8 @@ export interface Cart {
   product_name: string;
   amount: number;
   quantity: number;
+  userId?: string;
+  productId?: string;
 }
 
 export interface CartWithDetails extends Cart {
